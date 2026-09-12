@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class JellyCellData
 {
-   public Vector2Int position;
+   public Vector2Int Position;
 
-   public List<JellyPieceData> pieces = new();
+   public List<JellyPieceData> Pieces = new();
 }

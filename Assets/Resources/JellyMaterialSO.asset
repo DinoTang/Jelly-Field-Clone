@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da9f81806b8c4f240b405d709b467113, type: 3}
+  m_Name: JellyMaterialSO
+  m_EditorClassIdentifier: Assembly-CSharp::JellyMaterialSO
+  cyan: {fileID: 2100000, guid: c4f6fb0f72ca4254993c01d693548a27, type: 2}
+  green: {fileID: 2100000, guid: daa2e6af8d1a23b48ba6c189fbc73aad, type: 2}
+  purple: {fileID: 2100000, guid: 485af5ea9fff08f468c8f13f054d2fb8, type: 2}
+  pink: {fileID: 2100000, guid: c1c1a7abbb7659144af354174a736198, type: 2}
+  yellow: {fileID: 2100000, guid: 6f9a2baabfe683d47a0615caefde0bdb, type: 2}

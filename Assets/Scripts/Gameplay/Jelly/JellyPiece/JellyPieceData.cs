@@ -4,6 +4,6 @@ using System.Collections.Generic;
 [Serializable]
 public class JellyPieceData
 {
-   public JellyColor color;
-   public List<JellySlotType> slots = new();
+   public JellyColor Color;
+   public List<JellySlotType> Slots = new();
 }

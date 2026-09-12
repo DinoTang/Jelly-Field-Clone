@@ -16,9 +16,31 @@ MonoBehaviour:
   height: 3
   validCells: 000101010001010101010001010100
   jellyCells:
-  - position: {x: 0, y: 2}
-    pieces:
-    - color: 3
-      slots: 0000000001000000
-    - color: 1
-      slots: 0200000003000000
+  - Position: {x: 2, y: 0}
+    Pieces:
+    - Color: 3
+      Slots: 0000000001000000
+    - Color: 1
+      Slots: 0200000003000000
+  - Position: {x: 1, y: 2}
+    Pieces:
+    - Color: 1
+      Slots: 00000000
+    - Color: 4
+      Slots: 01000000
+    - Color: 3
+      Slots: 02000000
+    - Color: 2
+      Slots: 03000000
+  - Position: {x: 4, y: 1}
+    Pieces:
+    - Color: 1
+      Slots: 00000000
+    - Color: 5
+      Slots: 0100000003000000
+    - Color: 3
+      Slots: 02000000
+  - Position: {x: 3, y: 2}
+    Pieces:
+    - Color: 3
+      Slots: 00000000010000000200000003000000
