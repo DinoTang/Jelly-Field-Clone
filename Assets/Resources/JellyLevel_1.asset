@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584db44d66bd71c47a0dbbc24cf24ff1, type: 3}
+  m_Name: JellyLevel_1
+  m_EditorClassIdentifier: Assembly-CSharp::JellyLevelSO
+  width: 5
+  height: 3
+  validCells: 000101010001010101010001010100
+  jellyCells:
+  - position: {x: 0, y: 2}
+    pieces:
+    - color: 3
+      slots: 0000000001000000
+    - color: 1
+      slots: 0200000003000000
