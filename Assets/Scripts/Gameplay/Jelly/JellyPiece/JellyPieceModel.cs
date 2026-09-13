@@ -14,7 +14,7 @@ public class JellyPieceModel : JellyPieceAbstract
         this.LoadMeshRenderer();
     }
 
-    protected void LoadMeshRenderer()
+    private void LoadMeshRenderer()
     {
         if (this.meshRenderer != null) return;
         this.meshRenderer = GetComponent<MeshRenderer>();
@@ -38,7 +38,7 @@ public class JellyPieceModel : JellyPieceAbstract
 
     public void SetSizeHalfHorizontal()
     {
-        this.transform.localScale = new Vector3(32, 18, 35);
+        this.transform.localScale = new Vector3(36, 18, 35);
     }
 
     public void SetSizeHalfVertical()
@@ -48,6 +48,6 @@ public class JellyPieceModel : JellyPieceAbstract
 
     public void SetSizeFull()
     {
-        this.transform.localScale = new Vector3(32, 36, 35);
+        this.transform.localScale = new Vector3(36, 36, 35);
     }
 }

@@ -21,21 +21,21 @@ public class BoardBuilder : BaseBehaviour
       this.LoadJellyPieceSpawner();
    }
 
-   protected void LoadBoardSlotSpawner()
+   private void LoadBoardSlotSpawner()
    {
       if (this.boardSlotSpawner != null) return;
       this.boardSlotSpawner = FindAnyObjectByType<BoardSlotSpawner>();
       Debug.Log(this.transform.name + ": LoadBoardSlotSpawner");
    }
 
-   protected void LoadJellyCellSpawner()
+   private void LoadJellyCellSpawner()
    {
       if (this.jellyCellSpawner != null) return;
       this.jellyCellSpawner = FindAnyObjectByType<JellyCellSpawner>();
       Debug.Log(this.transform.name + ": LoadJellyCellSpawner");
    }
 
-   protected void LoadJellyPieceSpawner()
+   private void LoadJellyPieceSpawner()
    {
       if (this.jellyPieceSpawner != null) return;
       this.jellyPieceSpawner = FindAnyObjectByType<JellyPieceSpawner>();
@@ -52,14 +52,14 @@ public class BoardBuilder : BaseBehaviour
          {
             if (!levelData.IsValid(x, y)) continue;
 
-            Vector3 slotPos = this.GetBoardPosition(x, y, levelData, 0f);
+            Vector3 slotPos = this.GetBoardPosition(x, y, levelData);
 
             BoardSlot slot = boardSlotSpawner.Spawn("BoardSlot", slotPos);
             slot.transform.localScale = Vector3.one * boardSlotSize;
 
             this.grid.Set(x, y, slot);
 
-            this.BuildJellyCell(levelData, x, y);
+            this.BuildJellyCell(slot, levelData, x, y);
          }
       }
    }
@@ -69,28 +69,31 @@ public class BoardBuilder : BaseBehaviour
       this.grid = new GridModel<BoardSlot>(levelData.Width, levelData.Height);
    }
 
-   public Vector3 GetBoardPosition(int x, int y, JellyLevelSO levelData, float depthOffset)
+   public Vector3 GetBoardPosition(int x, int y, JellyLevelSO levelData)
    {
       int worldY = levelData.Height - 1 - y;
 
       return this.boardOrigin + new Vector3(
           x * cellSpacing,
-          worldY * cellSpacing,
-          depthOffset
+          worldY * cellSpacing
       );
    }
 
-   private void BuildJellyCell(JellyLevelSO levelData, int x, int y)
+   private void BuildJellyCell(BoardSlot slot, JellyLevelSO levelData, int x, int y)
    {
-      // Spawn jellyCell
       JellyCellData jellyCellData = levelData.JellyCells.Find(cell => cell.Position.x == x && cell.Position.y == y);
       if (jellyCellData == null) return;
 
-      Vector3 jellyCellPos = this.GetBoardPosition(x, y, levelData, -0.32f);
+      // Spawn jellyCell
+
+      Vector3 jellyCellPos = this.GetBoardPosition(x, y, levelData);
       JellyCellCtrl jellyCellCtrl = this.jellyCellSpawner.Spawn("JellyCellCtrl", jellyCellPos);
 
       // SetData cho jellyCellCtrl
       jellyCellCtrl.JellyCellConfig.SetGridPos(x, y);
+      jellyCellCtrl.SetJellyPosition();
+
+      slot.SetJellyCell(jellyCellCtrl);
 
       // Spawn jellyPiece
       this.BuildJellyPiece(jellyCellData, jellyCellCtrl, jellyCellPos);
@@ -115,6 +118,6 @@ public class BoardBuilder : BaseBehaviour
          jellyCellCtrl.JellyCellArrange.ArrangePiece(jellyPieceCtrl);
       }
 
-      jellyCellCtrl.JellyCellDragHandler.CachePieceOffset();
+      jellyCellCtrl.JellyCellDragHandler.CachePieceOffsets();
    }
 }

@@ -22,14 +22,14 @@ public class JellyPieceCtrl : PoolObj
       this.LoadJellyCellConfig();
    }
 
-   protected void LoadJellyPieceModel()
+   private void LoadJellyPieceModel()
    {
       if (this.jellyPieceModel != null) return;
       this.jellyPieceModel = GetComponentInChildren<JellyPieceModel>();
       Debug.Log(transform.name + ": LoadJellyPieceModel");
    }
 
-   protected void LoadJellyCellConfig()
+   private void LoadJellyCellConfig()
    {
       if (this.jellyCellConfig != null) return;
       this.jellyCellConfig = GetComponentInChildren<JellyPieceConfig>();

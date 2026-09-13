@@ -14,7 +14,7 @@ public abstract class JellyCellAbstract : BaseBehaviour
         this.LoadJellyCellCtrl();
     }
 
-    protected void LoadJellyCellCtrl()
+    private void LoadJellyCellCtrl()
     {
         if (this.jellyCellCtrl != null) return;
         this.jellyCellCtrl = GetComponentInParent<JellyCellCtrl>();

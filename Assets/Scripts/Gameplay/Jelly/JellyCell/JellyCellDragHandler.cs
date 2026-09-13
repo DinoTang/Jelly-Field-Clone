@@ -10,8 +10,17 @@ public class JellyCellDragHandler : JellyCellAbstract,
     IPointerUpHandler
 {
     [Header("Jelly Cell Drag Handler")]
+    [SerializeField] protected bool isClocking = true;
     [SerializeField] protected Vector3 dragOffset;
     [SerializeField] protected BoxCollider boxCollider;
+
+    public BoxCollider BoxCollider => boxCollider;
+    private Vector3 dragStartPosition;
+
+    private void SetupCollider()
+    {
+        this.boxCollider.size = new Vector3(0.74f, 0.73f, 0.735f);
+    }
 
     protected override void LoadComponent()
     {
@@ -19,7 +28,7 @@ public class JellyCellDragHandler : JellyCellAbstract,
         this.LoadBoxCollider();
     }
 
-    protected void LoadBoxCollider()
+    private void LoadBoxCollider()
     {
         if (this.boxCollider != null) return;
         this.boxCollider = GetComponent<BoxCollider>();
@@ -27,12 +36,51 @@ public class JellyCellDragHandler : JellyCellAbstract,
         Debug.Log(transform.name + ": LoadBoxCollider");
     }
 
-    private void SetupCollider()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        this.boxCollider.size = new Vector3(0.74f, 0.73f, 0.735f);
+        if (this.isClocking) return;
+
+        this.SaveStartPos();
+
+        // bỏ slot cũ khi bắt đầu kéo
+        this.RemoveJellyCellFromOldSlot();
+
+        // tính khoảng lệch giữa pos JellyCell và pos chuột lúc bắt đầu kéo
+        this.CacheDragOffset(eventData);
+
+        Debug.Log("Start Drag");
     }
 
-    public void CachePieceOffset()
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (this.isClocking) return;
+
+        // Lấy vị trí cần tới
+        Vector3 targetPosition = this.GetDragPosition(eventData);
+
+        // Đồng bộ vị trí giữa jellyPiece và jellyCell
+        this.SyncPosition(targetPosition);
+
+        this.jellyCellCtrl.JellyCellDropHandler.UpdatePlacementPreview();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (this.isClocking) return;
+
+        this.jellyCellCtrl.JellyCellDropHandler.HandleDrop();
+    }
+
+
+    public void SaveStartPos()
+    {
+        this.dragStartPosition = transform.parent.position;
+    }
+    public void ReturnPosition()
+    {
+        this.jellyCellCtrl.JellyCellDragHandler.SyncPosition(this.dragStartPosition);
+    }
+    public void CachePieceOffsets()
     {
         foreach (JellyPieceCtrl jellyPiece in this.jellyCellCtrl.JellyCellConfig.JellyPieces)
         {
@@ -42,10 +90,9 @@ public class JellyCellDragHandler : JellyCellAbstract,
         }
     }
 
-
-    public void Move(Vector3 position)
+    public void SyncPosition(Vector3 position)
     {
-        transform.parent.position = position;
+        this.jellyCellCtrl.transform.position = position;
 
         foreach (JellyPieceCtrl piece in this.jellyCellCtrl.JellyCellConfig.JellyPieces)
         {
@@ -53,29 +100,27 @@ public class JellyCellDragHandler : JellyCellAbstract,
                 position + piece.Offset;
         }
     }
+    private void RemoveJellyCellFromOldSlot()
+    {
+        if (this.jellyCellCtrl.CurrentSlot != null)
+        {
+            this.jellyCellCtrl.CurrentSlot.RemoveJellyCell();
+            this.jellyCellCtrl.ClearCurrentSlot();
+        }
+    }
 
-
-    public void OnPointerDown(PointerEventData eventData)
+    private void CacheDragOffset(PointerEventData eventData)
     {
         Vector3 mouseWorld = InputManager.Instance.GetMouseWorldPosition(eventData);
 
-        dragOffset = transform.position - mouseWorld;
-
-        Debug.Log("Start Drag");
+        this.dragOffset = transform.parent.position - mouseWorld;
     }
 
-    public void OnDrag(PointerEventData eventData)
+    private Vector3 GetDragPosition(PointerEventData eventData)
     {
         Vector3 mouseWorld = InputManager.Instance.GetMouseWorldPosition(eventData);
 
-        Vector3 targetPosition = mouseWorld + dragOffset;
-
-        this.Move(targetPosition);
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-
+        return mouseWorld + this.dragOffset;
     }
 
 }

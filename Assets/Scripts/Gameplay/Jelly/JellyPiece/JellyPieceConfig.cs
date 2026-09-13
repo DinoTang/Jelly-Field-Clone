@@ -20,7 +20,7 @@ public class JellyPieceConfig : JellyPieceAbstract
       this.LoadJellyMaterialSO();
    }
 
-   protected void LoadJellyMaterialSO()
+   private void LoadJellyMaterialSO()
    {
       if (this.jellyMaterialSO != null) return;
       this.jellyMaterialSO = Resources.Load<JellyMaterialSO>("JellyMaterialSO");

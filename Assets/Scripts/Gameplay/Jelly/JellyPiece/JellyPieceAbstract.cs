@@ -11,7 +11,7 @@ public class JellyPieceAbstract : BaseBehaviour
       this.LoadJellyPieceCtrl();
    }
 
-   protected void LoadJellyPieceCtrl()
+   private void LoadJellyPieceCtrl()
    {
       if (this.jellyPieceCtrl != null) return;
       this.jellyPieceCtrl = GetComponentInParent<JellyPieceCtrl>();

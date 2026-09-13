@@ -19,7 +19,7 @@ public class JellyCellArrange : JellyCellAbstract
         this.UpdateSlotPositions();
     }
 
-    protected void LoadSlotPositions()
+    private void LoadSlotPositions()
     {
         if (this.topLeft != null) return;
 
@@ -29,7 +29,7 @@ public class JellyCellArrange : JellyCellAbstract
         this.bottomRight = transform.Find("BottomRight_Pos");
     }
 
-    protected void UpdateSlotPositions()
+    private void UpdateSlotPositions()
     {
         topLeft.localPosition = new Vector3(-slotDistance, slotDistance, 0f);
         topRight.localPosition = new Vector3(slotDistance, slotDistance, 0f);
@@ -37,7 +37,7 @@ public class JellyCellArrange : JellyCellAbstract
         bottomRight.localPosition = new Vector3(slotDistance, -slotDistance, 0f);
     }
 
-    protected Transform GetSlotTransform(JellySlotType slot)
+    private Transform GetSlotTransform(JellySlotType slot)
     {
         return slot switch
         {
@@ -92,7 +92,7 @@ public class JellyCellArrange : JellyCellAbstract
         }
     }
 
-    protected bool IsHorizontal(JellySlotType a, JellySlotType b)
+    private bool IsHorizontal(JellySlotType a, JellySlotType b)
     {
         return (a == JellySlotType.TopLeft && b == JellySlotType.TopRight) ||
                (a == JellySlotType.TopRight && b == JellySlotType.TopLeft) ||

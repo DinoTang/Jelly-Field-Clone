@@ -14,7 +14,7 @@ public abstract class Despawn<T> : DespawnBase where T : PoolObj
         this.LoadParent();
         this.currentTime = this.lifeTime;
     }
-    protected void Update()
+    private void Update()
     {
         if (!this.isNeedDespawn) return;
         this.DespawnByTime();
@@ -23,7 +23,7 @@ public abstract class Despawn<T> : DespawnBase where T : PoolObj
     {
         this.currentTime = this.lifeTime;
     }
-    protected void LoadSpawner()
+    private void LoadSpawner()
     {
         if (this.spawner != null) return;
         this.spawner = FindAnyObjectByType<Spawner<T>>();
@@ -35,7 +35,7 @@ public abstract class Despawn<T> : DespawnBase where T : PoolObj
         this.parent = transform.parent.GetComponent<T>();
         Debug.Log(transform.name + ": LoadParent", gameObject);
     }
-    protected void DespawnByTime()
+    private void DespawnByTime()
     {
         this.currentTime -= Time.deltaTime;
         if (this.currentTime > 0) return;

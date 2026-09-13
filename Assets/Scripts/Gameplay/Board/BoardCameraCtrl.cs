@@ -10,7 +10,7 @@ public class BoardCameraCtrl : BaseBehaviour
       this.LoadMainCamera();
    }
 
-   protected void LoadMainCamera()
+   private void LoadMainCamera()
    {
       if (this.mainCamera != null) return;
       this.mainCamera = Camera.main.transform;

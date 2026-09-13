@@ -2,19 +2,20 @@ using UnityEngine;
 
 public class Singleton<T> : BaseBehaviour where T : BaseBehaviour
 {
-   public static T Instance { get; private set; }
+   private static T instance;
+   public static T Instance => instance;
 
 
    protected override void Awake()
    {
-      if (Instance != null && Instance != this)
+      if (instance != null && instance != this)
       {
          Destroy(gameObject);
          return;
       }
 
 
-      Instance = this as T;
+      instance = this as T;
       DontDestroyOnLoad(gameObject);
    }
 }

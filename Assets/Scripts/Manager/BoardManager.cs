@@ -1,10 +1,14 @@
 using UnityEngine;
 
-public class BoardManager : BaseBehaviour
+public class BoardManager : Singleton<BoardManager>
 {
    [SerializeField] protected JellyLevelSO levelData;
    [SerializeField] protected BoardBuilder boardBuilder;
-   [SerializeField] private BoardCameraCtrl boardCameraCtrl;
+   [SerializeField] protected BoardCameraCtrl boardCameraCtrl;
+   [SerializeField] protected BoardPlacementPreview boardPlacementPreview;
+
+   public BoardBuilder BoardBuilder => boardBuilder;
+   public BoardPlacementPreview BoardPlacementPreview => boardPlacementPreview;
 
    protected override void Start()
    {
@@ -19,19 +23,27 @@ public class BoardManager : BaseBehaviour
       base.LoadComponent();
       this.LoadBoardBuilder();
       this.LoadBoardCameraCtrl();
+      this.LoadBoardPlacementPreview();
    }
 
-   protected void LoadBoardBuilder()
+   private void LoadBoardBuilder()
    {
       if (this.boardBuilder != null) return;
       this.boardBuilder = GetComponentInChildren<BoardBuilder>();
       Debug.Log(this.transform.name + ": LoadBoardBuilder");
    }
 
-   protected void LoadBoardCameraCtrl()
+   private void LoadBoardCameraCtrl()
    {
       if (this.boardCameraCtrl != null) return;
       this.boardCameraCtrl = GetComponentInChildren<BoardCameraCtrl>();
       Debug.Log(this.transform.name + ": LoadBoardCameraCtrl");
+   }
+
+   private void LoadBoardPlacementPreview()
+   {
+      if (this.boardPlacementPreview != null) return;
+      this.boardPlacementPreview = GetComponentInChildren<BoardPlacementPreview>();
+      Debug.Log(this.transform.name + ": LoadBoardPlacementPreview");
    }
 }

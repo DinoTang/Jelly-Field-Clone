@@ -18,21 +18,21 @@ public abstract class Spawner<T> : BaseBehaviour where T : PoolObj
         this.LoadPrefabs();
     }
 
-    protected void LoadPoolHolder()
+    private void LoadPoolHolder()
     {
         if (this.poolHolder != null) return;
         this.poolHolder = GetComponentInChildren<PoolHolder>();
         Debug.Log($"{this.transform.name}: LoadPoolHolder", this.gameObject);
     }
 
-    protected void LoadPrefabRoot()
+    private void LoadPrefabRoot()
     {
         if (this.prefabRoot != null) return;
         this.prefabRoot = this.transform.Find("Prefabs");
         Debug.Log($"{this.transform.name}: LoadPrefabRoot", this.gameObject);
     }
 
-    protected void LoadPrefabs()
+    private void LoadPrefabs()
     {
         this.LoadPrefabRoot();
         if (this.prefabRoot == null)
@@ -127,7 +127,7 @@ public abstract class Spawner<T> : BaseBehaviour where T : PoolObj
         }
     }
 
-    protected void AddObjIntoPool(T obj)
+    private void AddObjIntoPool(T obj)
     {
         if (obj == null) return;
         if (this.poolObjsList.Contains(obj)) return;
@@ -135,7 +135,7 @@ public abstract class Spawner<T> : BaseBehaviour where T : PoolObj
         this.poolObjsList.Add(obj);
     }
 
-    protected void RemoveObjIntoPool(T obj)
+    private void RemoveObjIntoPool(T obj)
     {
         if (obj == null) return;
         this.poolObjsList.Remove(obj);
@@ -146,7 +146,7 @@ public abstract class Spawner<T> : BaseBehaviour where T : PoolObj
         newObject.name = $"{prefab.name}_{this.spawnCount}";
     }
 
-    protected T GetObjFromPool(T prefab)
+    private T GetObjFromPool(T prefab)
     {
         if (prefab == null) return null;
 
