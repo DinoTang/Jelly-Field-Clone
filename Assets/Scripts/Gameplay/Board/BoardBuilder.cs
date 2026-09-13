@@ -10,7 +10,6 @@ public class BoardBuilder : BaseBehaviour
    [SerializeField] private float boardSlotSize = 0.75f;
 
    private GridModel<BoardSlot> grid;
-
    public GridModel<BoardSlot> Grid => grid;
    public float CellSpacing => cellSpacing;
    public Vector3 BoardOrigin => boardOrigin;
@@ -42,6 +41,7 @@ public class BoardBuilder : BaseBehaviour
       this.jellyPieceSpawner = FindAnyObjectByType<JellyPieceSpawner>();
       Debug.Log(this.transform.name + ": LoadJellyPieceSpawner");
    }
+
    public void Build(JellyLevelSO levelData)
    {
       this.InitGrid(levelData);
@@ -50,16 +50,16 @@ public class BoardBuilder : BaseBehaviour
       {
          for (int y = 0; y < grid.Height; y++)
          {
-            if (!levelData.IsValid(x, y))
-               continue;
+            if (!levelData.IsValid(x, y)) continue;
 
-            Vector3 position = this.GetBoardPosition(x, y, levelData);
+            Vector3 slotPos = this.GetBoardPosition(x, y, levelData, 0f);
 
-            BoardSlot slot = boardSlotSpawner.Spawn("BoardSlot", position);
+            BoardSlot slot = boardSlotSpawner.Spawn("BoardSlot", slotPos);
             slot.transform.localScale = Vector3.one * boardSlotSize;
+
             this.grid.Set(x, y, slot);
 
-            this.BuildJellyCell(levelData, x, y, position);
+            this.BuildJellyCell(levelData, x, y);
          }
       }
    }
@@ -69,35 +69,36 @@ public class BoardBuilder : BaseBehaviour
       this.grid = new GridModel<BoardSlot>(levelData.Width, levelData.Height);
    }
 
-   public Vector3 GetBoardPosition(int x, int y, JellyLevelSO levelData)
+   public Vector3 GetBoardPosition(int x, int y, JellyLevelSO levelData, float depthOffset)
    {
       int worldY = levelData.Height - 1 - y;
 
       return this.boardOrigin + new Vector3(
           x * cellSpacing,
           worldY * cellSpacing,
-          0f
+          depthOffset
       );
    }
 
-   private void BuildJellyCell(JellyLevelSO levelData, int x, int y, Vector3 position)
+   private void BuildJellyCell(JellyLevelSO levelData, int x, int y)
    {
       // Spawn jellyCell
       JellyCellData jellyCellData = levelData.JellyCells.Find(cell => cell.Position.x == x && cell.Position.y == y);
       if (jellyCellData == null) return;
 
-      JellyCellCtrl jellyCellCtrl = this.jellyCellSpawner.Spawn("JellyCellCtrl", position);
+      Vector3 jellyCellPos = this.GetBoardPosition(x, y, levelData, -0.32f);
+      JellyCellCtrl jellyCellCtrl = this.jellyCellSpawner.Spawn("JellyCellCtrl", jellyCellPos);
 
       // SetData cho jellyCellCtrl
-      jellyCellCtrl.SetGridPos(x, y);
-      jellyCellCtrl.SetJellyPieces(jellyCellData.Pieces);
+      jellyCellCtrl.JellyCellConfig.SetGridPos(x, y);
 
-      this.BuildJellyPiece(jellyCellData, jellyCellCtrl, position);
+      // Spawn jellyPiece
+      this.BuildJellyPiece(jellyCellData, jellyCellCtrl, jellyCellPos);
    }
 
    private void BuildJellyPiece(JellyCellData jellyCellData, JellyCellCtrl jellyCellCtrl, Vector3 position)
    {
-      // Spawn jellyPiece
+
       foreach (JellyPieceData jellyPieceData in jellyCellData.Pieces)
       {
          JellyPieceCtrl jellyPieceCtrl = this.jellyPieceSpawner.Spawn("JellyPieceCtrl", position);
@@ -107,8 +108,13 @@ public class BoardBuilder : BaseBehaviour
          jellyPieceCtrl.JellyPieceModel.ApplyMaterialByColor();
          jellyPieceCtrl.JellyCellConfig.SetSlots(jellyPieceData.Slots);
 
+         // Đưa các jellyPiece vào danh sách chứa của jellyCell
+         jellyCellCtrl.JellyCellConfig.AddJellyPieces(jellyPieceCtrl);
+
          // Arrange các jellyPiece
-         jellyCellCtrl.ArrangePiece(jellyPieceCtrl);
+         jellyCellCtrl.JellyCellArrange.ArrangePiece(jellyPieceCtrl);
       }
+
+      jellyCellCtrl.JellyCellDragHandler.CachePieceOffset();
    }
 }

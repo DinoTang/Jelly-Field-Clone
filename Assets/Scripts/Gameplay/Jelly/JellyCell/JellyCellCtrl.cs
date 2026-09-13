@@ -1,18 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class JellyCellCtrl : PoolObj
 {
-    [Header("JellyCellCtrl")]
-    [SerializeField] protected Vector2Int gridPos;
-    [SerializeField] protected List<JellyPieceData> pieces = new();
+    [Header("Jelly Cell Ctrl")]
+    [SerializeField] protected JellyCellArrange jellyCellArrange;
+    [SerializeField] protected JellyCellConfig jellyCellConfig;
+    [SerializeField] protected JellyCellDragHandler jellyCellDragHandler;
 
-    [Header("TransformPosition")]
-    [SerializeField] protected Transform topLeft;
-    [SerializeField] protected Transform topRight;
-    [SerializeField] protected Transform bottomLeft;
-    [SerializeField] protected Transform bottomRight;
-    [SerializeField] private float slotDistance = 0.18f;
+    public JellyCellArrange JellyCellArrange => jellyCellArrange;
+    public JellyCellConfig JellyCellConfig => jellyCellConfig;
+    public JellyCellDragHandler JellyCellDragHandler => jellyCellDragHandler;
 
     public override string GetName()
     {
@@ -22,97 +21,29 @@ public class JellyCellCtrl : PoolObj
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        this.LoadSlotPositions();
-        this.UpdateSlotPositions();
+        this.LoadJellyCellArrange();
+        this.LoadJellyCellConfig();
+        this.LoadJellyCellDragHandler();
     }
 
-    public void SetGridPos(int x, int y)
+    protected void LoadJellyCellArrange()
     {
-        this.gridPos = new Vector2Int(x, y);
+        if (this.jellyCellArrange != null) return;
+        this.jellyCellArrange = GetComponentInChildren<JellyCellArrange>();
+        Debug.Log(transform.name + ": LoadJellyCellArrange");
     }
 
-    public void SetJellyPieces(List<JellyPieceData> pieces)
+    protected void LoadJellyCellConfig()
     {
-        this.pieces = new List<JellyPieceData>(pieces);
-    }
-    protected void LoadSlotPositions()
-    {
-        if (this.topLeft != null) return;
-
-        this.topLeft = transform.Find("TopLeft_Pos");
-        this.topRight = transform.Find("TopRight_Pos");
-        this.bottomLeft = transform.Find("BottomLeft_Pos");
-        this.bottomRight = transform.Find("BottomRight_Pos");
+        if (this.jellyCellConfig != null) return;
+        this.jellyCellConfig = GetComponentInChildren<JellyCellConfig>();
+        Debug.Log(transform.name + ": LoadJellyCellConfig");
     }
 
-    protected void UpdateSlotPositions()
+    protected void LoadJellyCellDragHandler()
     {
-        topLeft.localPosition = new Vector3(-slotDistance, slotDistance, 0f);
-        topRight.localPosition = new Vector3(slotDistance, slotDistance, 0f);
-        bottomLeft.localPosition = new Vector3(-slotDistance, -slotDistance, 0f);
-        bottomRight.localPosition = new Vector3(slotDistance, -slotDistance, 0f);
-    }
-
-    protected Transform GetSlotTransform(JellySlotType slot)
-    {
-        return slot switch
-        {
-            JellySlotType.TopLeft => topLeft,
-            JellySlotType.TopRight => topRight,
-            JellySlotType.BottomLeft => bottomLeft,
-            JellySlotType.BottomRight => bottomRight,
-            _ => null
-        };
-    }
-
-    public void ArrangePiece(JellyPieceCtrl jellyPiece)
-    {
-        List<JellySlotType> slots = jellyPiece.JellyCellConfig.Slots;
-
-        if (slots.Count == 1)
-        {
-            Transform target = GetSlotTransform(slots[0]);
-
-            jellyPiece.transform.position = target.position;
-            jellyPiece.JellyPieceModel.SetSizeQuarter();
-            return;
-        }
-
-        if (slots.Count == 2)
-        {
-            Transform a = GetSlotTransform(slots[0]);
-            Transform b = GetSlotTransform(slots[1]);
-
-            Vector3 center = (a.position + b.position) * 0.5f;
-
-            jellyPiece.transform.position = center;
-
-            if (IsHorizontal(slots[0], slots[1]))
-                jellyPiece.JellyPieceModel.SetSizeHalfHorizontal();
-            else
-                jellyPiece.JellyPieceModel.SetSizeHalfVertical();
-
-            return;
-        }
-
-        if (slots.Count == 4)
-        {
-            Vector3 center =
-                (topLeft.position +
-                 topRight.position +
-                 bottomLeft.position +
-                 bottomRight.position) / 4f;
-
-            jellyPiece.transform.position = center;
-            jellyPiece.JellyPieceModel.SetSizeFull();
-        }
-    }
-
-    protected bool IsHorizontal(JellySlotType a, JellySlotType b)
-    {
-        return (a == JellySlotType.TopLeft && b == JellySlotType.TopRight) ||
-               (a == JellySlotType.TopRight && b == JellySlotType.TopLeft) ||
-               (a == JellySlotType.BottomLeft && b == JellySlotType.BottomRight) ||
-               (a == JellySlotType.BottomRight && b == JellySlotType.BottomLeft);
+        if (this.jellyCellDragHandler != null) return;
+        this.jellyCellDragHandler = GetComponentInChildren<JellyCellDragHandler>();
+        Debug.Log(transform.name + ": LoadJellyCellDragHandler");
     }
 }

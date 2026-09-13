@@ -33,21 +33,21 @@ public class JellyPieceModel : JellyPieceAbstract
     }
     public void SetSizeQuarter()
     {
-        this.transform.localScale = new Vector3(18, 18, 18);
+        this.transform.localScale = new Vector3(18, 18, 35);
     }
 
     public void SetSizeHalfHorizontal()
     {
-        this.transform.localScale = new Vector3(36, 18, 18);
+        this.transform.localScale = new Vector3(32, 18, 35);
     }
 
     public void SetSizeHalfVertical()
     {
-        this.transform.localScale = new Vector3(18, 36, 18);
+        this.transform.localScale = new Vector3(18, 36, 35);
     }
 
     public void SetSizeFull()
     {
-        this.transform.localScale = new Vector3(36, 36, 18);
+        this.transform.localScale = new Vector3(32, 36, 35);
     }
 }

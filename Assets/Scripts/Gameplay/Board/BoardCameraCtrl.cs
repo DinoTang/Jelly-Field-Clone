@@ -13,7 +13,7 @@ public class BoardCameraCtrl : BaseBehaviour
    protected void LoadMainCamera()
    {
       if (this.mainCamera != null) return;
-      this.mainCamera = FindAnyObjectByType<MainCamera>().transform;
+      this.mainCamera = Camera.main.transform;
       Debug.Log(this.transform.name + ": LoadMainCamera");
    }
 
@@ -26,7 +26,7 @@ public class BoardCameraCtrl : BaseBehaviour
       );
 
       Quaternion rotation =
-          Quaternion.Euler(-10f, 0f, 0f);
+          Quaternion.Euler(-15f, 0f, 0f);
 
       mainCamera.rotation = rotation;
       mainCamera.position =

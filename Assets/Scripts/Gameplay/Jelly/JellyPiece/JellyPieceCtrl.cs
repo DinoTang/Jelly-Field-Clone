@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class JellyPieceCtrl : PoolObj
 {
-   [Header("JellyPieceCtrl")]
+   [Header("Jelly Piece Ctrl")]
    [SerializeField] protected JellyPieceModel jellyPieceModel;
    public JellyPieceModel JellyPieceModel => jellyPieceModel;
 
@@ -34,5 +34,15 @@ public class JellyPieceCtrl : PoolObj
       if (this.jellyCellConfig != null) return;
       this.jellyCellConfig = GetComponentInChildren<JellyPieceConfig>();
       Debug.Log(transform.name + ": LoadJellyCellConfig");
+   }
+
+
+   private Vector3 offset;
+
+   public Vector3 Offset => offset;
+
+   public void SetOffset(Vector3 offset)
+   {
+      this.offset = offset;
    }
 }
