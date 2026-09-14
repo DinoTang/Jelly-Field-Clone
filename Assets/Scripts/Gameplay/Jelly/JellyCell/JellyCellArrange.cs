@@ -51,7 +51,7 @@ public class JellyCellArrange : JellyCellAbstract
 
     public void ArrangePiece(JellyPieceCtrl jellyPiece)
     {
-        List<JellySlotType> slots = jellyPiece.JellyCellConfig.Slots;
+        List<JellySlotType> slots = jellyPiece.JellyPieceConfig.Slots;
 
         if (slots.Count == 1)
         {

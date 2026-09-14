@@ -21,6 +21,10 @@ public class JellyCellDragHandler : JellyCellAbstract,
     {
         this.boxCollider.size = new Vector3(0.74f, 0.73f, 0.735f);
     }
+    public void SetIsClocking(bool isClocking)
+    {
+        this.isClocking = isClocking;
+    }
 
     protected override void LoadComponent()
     {
@@ -86,7 +90,7 @@ public class JellyCellDragHandler : JellyCellAbstract,
         {
             Vector3 offset = jellyPiece.transform.position - transform.position;
 
-            jellyPiece.SetOffset(offset);
+            jellyPiece.JellyPieceConfig.SetOffset(offset);
         }
     }
 
@@ -97,7 +101,7 @@ public class JellyCellDragHandler : JellyCellAbstract,
         foreach (JellyPieceCtrl piece in this.jellyCellCtrl.JellyCellConfig.JellyPieces)
         {
             piece.transform.position =
-                position + piece.Offset;
+                position + piece.JellyPieceConfig.Offset;
         }
     }
     private void RemoveJellyCellFromOldSlot()

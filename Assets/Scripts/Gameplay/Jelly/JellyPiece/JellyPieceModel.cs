@@ -28,7 +28,7 @@ public class JellyPieceModel : JellyPieceAbstract
 
     public void ApplyMaterialByColor()
     {
-        Material material = this.jellyPieceCtrl.JellyCellConfig.JellyMaterialSO.GetMaterial(this.color);
+        Material material = this.jellyPieceCtrl.JellyPieceConfig.JellyMaterialSO.GetMaterial(this.color);
         this.meshRenderer.sharedMaterial = material;
     }
     public void SetSizeQuarter()

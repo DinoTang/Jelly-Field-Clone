@@ -8,7 +8,7 @@ public class JellyPieceCtrl : PoolObj
    public JellyPieceModel JellyPieceModel => jellyPieceModel;
 
    [SerializeField] protected JellyPieceConfig jellyCellConfig;
-   public JellyPieceConfig JellyCellConfig => jellyCellConfig;
+   public JellyPieceConfig JellyPieceConfig => jellyCellConfig;
 
    public override string GetName()
    {
@@ -34,15 +34,5 @@ public class JellyPieceCtrl : PoolObj
       if (this.jellyCellConfig != null) return;
       this.jellyCellConfig = GetComponentInChildren<JellyPieceConfig>();
       Debug.Log(transform.name + ": LoadJellyCellConfig");
-   }
-
-
-   private Vector3 offset;
-
-   public Vector3 Offset => offset;
-
-   public void SetOffset(Vector3 offset)
-   {
-      this.offset = offset;
    }
 }

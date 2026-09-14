@@ -6,7 +6,7 @@ public class BoardBuilder : BaseBehaviour
    [SerializeField] private JellyCellSpawner jellyCellSpawner;
    [SerializeField] private JellyPieceSpawner jellyPieceSpawner;
    [SerializeField] private Vector3 boardOrigin = new(0f, 12f, 0f);
-   [SerializeField] private float cellSpacing = 0.7f;
+   [SerializeField] private float cellSpacing = 0.725f;
    [SerializeField] private float boardSlotSize = 0.75f;
 
    private GridModel<BoardSlot> grid;
@@ -62,6 +62,8 @@ public class BoardBuilder : BaseBehaviour
             this.BuildJellyCell(slot, levelData, x, y);
          }
       }
+
+      this.SpawnPlayerJellyCell(levelData);
    }
 
    private void InitGrid(JellyLevelSO levelData)
@@ -74,8 +76,8 @@ public class BoardBuilder : BaseBehaviour
       int worldY = levelData.Height - 1 - y;
 
       return this.boardOrigin + new Vector3(
-          x * cellSpacing,
-          worldY * cellSpacing
+         x * cellSpacing,
+         worldY * cellSpacing
       );
    }
 
@@ -109,7 +111,7 @@ public class BoardBuilder : BaseBehaviour
          // SetData cho jellyPieceCtrl
          jellyPieceCtrl.JellyPieceModel.SetColor(jellyPieceData.Color);
          jellyPieceCtrl.JellyPieceModel.ApplyMaterialByColor();
-         jellyPieceCtrl.JellyCellConfig.SetSlots(jellyPieceData.Slots);
+         jellyPieceCtrl.JellyPieceConfig.SetSlots(jellyPieceData.Slots);
 
          // Đưa các jellyPiece vào danh sách chứa của jellyCell
          jellyCellCtrl.JellyCellConfig.AddJellyPieces(jellyPieceCtrl);
@@ -119,5 +121,53 @@ public class BoardBuilder : BaseBehaviour
       }
 
       jellyCellCtrl.JellyCellDragHandler.CachePieceOffsets();
+   }
+
+
+   [SerializeField] private float spawnJellyY = -3f;
+   private Vector3 GetBoardCenter(JellyLevelSO levelData)
+   {
+      float centerX = (levelData.Width - 1) * cellSpacing * 0.5f;
+      float centerY = (levelData.Height - 1) * cellSpacing * 0.5f;
+
+
+      return boardOrigin + new Vector3(
+          centerX,
+          centerY,
+          0
+      );
+   }
+   private void SpawnPlayerJellyCell(JellyLevelSO levelData)
+   {
+      Vector3 center = this.GetBoardCenter(levelData);
+
+
+      Vector3 spawnPosition = center + new Vector3(
+         0,
+         this.spawnJellyY,
+         0
+      );
+
+
+      JellyCellCtrl jellyCellCtrl =
+          jellyCellSpawner.Spawn(
+              "JellyCellCtrl",
+              spawnPosition
+          );
+
+
+      JellyCellData jellyCellData =
+          levelData.JellyCells[0];
+
+
+      this.BuildJellyPiece(
+          jellyCellData,
+          jellyCellCtrl,
+          spawnPosition
+      );
+
+
+      jellyCellCtrl.JellyCellDragHandler.CachePieceOffsets();
+      jellyCellCtrl.JellyCellDragHandler.SetIsClocking(false);
    }
 }

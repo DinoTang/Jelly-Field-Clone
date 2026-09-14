@@ -5,9 +5,18 @@ public class JellyPieceConfig : JellyPieceAbstract
 {
    [Header("JellyPieceConfig")]
    [SerializeField] protected JellyMaterialSO jellyMaterialSO;
-   public JellyMaterialSO JellyMaterialSO => jellyMaterialSO;
    [SerializeField] protected List<JellySlotType> slots;
+
+   private Vector3 offset;
+
+   public JellyMaterialSO JellyMaterialSO => jellyMaterialSO;
    public List<JellySlotType> Slots => slots;
+   public Vector3 Offset => offset;
+
+   public void SetOffset(Vector3 offset)
+   {
+      this.offset = offset;
+   }
 
    public void SetSlots(List<JellySlotType> slots)
    {
