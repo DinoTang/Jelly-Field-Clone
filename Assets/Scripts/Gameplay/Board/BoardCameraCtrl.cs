@@ -3,7 +3,8 @@ using UnityEngine;
 public class BoardCameraCtrl : BaseBehaviour
 {
    [SerializeField] private Transform mainCamera;
-
+   [SerializeField] private float cameraRotationX = -15f;
+   public float CameraRotationX => cameraRotationX;
    protected override void LoadComponent()
    {
       base.LoadComponent();
@@ -25,8 +26,8 @@ public class BoardCameraCtrl : BaseBehaviour
           0f
       );
 
-      Quaternion rotation =
-          Quaternion.Euler(-15f, 0f, 0f);
+      Quaternion rotation = Quaternion.Euler(this.cameraRotationX, 0f, 0f);
+
 
       mainCamera.rotation = rotation;
       mainCamera.position =

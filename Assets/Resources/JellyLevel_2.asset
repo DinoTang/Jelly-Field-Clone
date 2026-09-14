@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 584db44d66bd71c47a0dbbc24cf24ff1, type: 3}
-  m_Name: JellyLevel_1
+  m_Name: JellyLevel_2
   m_EditorClassIdentifier: Assembly-CSharp::JellyLevelSO
   width: 5
   height: 3
   validCells: 000101010001010101010001010100
   spawnPoints:
-  - position: {x: 1.45, y: 9.65, z: 0}
+  - position: {x: 0.7, y: 9.65, z: 0}
+  - position: {x: 2.2, y: 9.65, z: 0}
   jellyCells:
   - Position: {x: 2, y: 0}
     Pieces:

@@ -100,17 +100,24 @@ public class JellyCellArrange : JellyCellAbstract
                (a == JellySlotType.BottomRight && b == JellySlotType.BottomLeft);
     }
 
-    public void GetArrangeData(List<JellySlotType> slots, out Vector3 position, out Vector3 scale)
+    public void GetArrangeData(
+        JellyPieceCtrl jellyPiece,
+        List<JellySlotType> slots,
+        out Vector3 position,
+        out Vector3 scale)
     {
+
+        JellyPieceSizeConfig sizeConfig = jellyPiece.JellyPieceConfig.JellyPieceSizeConfig;
+
         position = transform.position;
-        scale = new Vector3(18f, 18f, 35f);
+        scale = sizeConfig.Quarter;
 
         if (slots == null || slots.Count == 0) return;
 
         if (slots.Count == 1)
         {
             position = this.GetSlotTransform(slots[0]).position;
-            scale = new Vector3(18f, 18f, 35f);
+            scale = sizeConfig.Quarter;
             return;
         }
 
@@ -121,23 +128,23 @@ public class JellyCellArrange : JellyCellAbstract
 
             position = (a.position + b.position) * 0.5f;
             scale = this.IsHorizontal(slots[0], slots[1])
-               ? new Vector3(36f, 18f, 35f)
-               : new Vector3(18f, 36f, 35f);
+               ? sizeConfig.HalfHorizontal
+               : sizeConfig.HalfVertical;
 
             return;
         }
 
-        if (slots.Count == 3)
-        {
-            position = (
-               this.GetSlotTransform(slots[0]).position +
-               this.GetSlotTransform(slots[1]).position +
-               this.GetSlotTransform(slots[2]).position
-            ) / 3f;
+        // if (slots.Count == 3)
+        // {
+        //     position = (
+        //        this.GetSlotTransform(slots[0]).position +
+        //        this.GetSlotTransform(slots[1]).position +
+        //        this.GetSlotTransform(slots[2]).position
+        //     ) / 3f;
 
-            scale = new Vector3(36f, 36f, 35f);
-            return;
-        }
+        //     scale = new Vector3(36f, 36f, 35f);
+        //     return;
+        // }
 
         if (slots.Count == 4)
         {
@@ -148,7 +155,7 @@ public class JellyCellArrange : JellyCellAbstract
                this.bottomRight.position
             ) / 4f;
 
-            scale = new Vector3(36f, 36f, 35f);
+            scale = sizeConfig.Full;
         }
     }
 }

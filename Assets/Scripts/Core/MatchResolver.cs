@@ -2,12 +2,16 @@ using System.Collections.Generic;
 
 public class MatchResolver
 {
-    public void Resolve(MatchResult matchResult, GridModel<BoardSlot> grid)
+    public void Resolve(MatchResult matchResult, GridModel<BoardSlot> grid, System.Action onComplete = null)
     {
-        if (!matchResult.HasMatch()) return;
+        if (!matchResult.HasMatch())
+        {
+            onComplete?.Invoke();
+            return;
+        }
 
         this.ClearMatches(matchResult);
-        this.FillMatches(matchResult);
+        this.FillMatches(matchResult, onComplete);
     }
 
     private void ClearMatches(MatchResult matchResult)
@@ -73,47 +77,133 @@ public class MatchResolver
         jellyCell.JellyCellDespawn.DoDespawn();
     }
 
-    private void FillMatches(MatchResult matchResult)
+    private void FillMatches(MatchResult matchResult, System.Action onComplete)
     {
+        Dictionary<JellyCellCtrl, List<JellyDirection>> fillRequests = new();
+
         foreach (MatchData match in matchResult.Matches)
         {
-            this.FillCell(match.CurrentCell, match.Direction);
-            this.FillCell(match.NeighborCell, this.GetOppositeDirection(match.Direction));
+            this.AddFillRequest(fillRequests, match.CurrentCell, match.Direction);
+            this.AddFillRequest(fillRequests, match.NeighborCell, this.GetOppositeDirection(match.Direction));
+        }
+
+        if (fillRequests.Count == 0)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        int remainingCells = fillRequests.Count;
+
+        foreach (KeyValuePair<JellyCellCtrl, List<JellyDirection>> pair in fillRequests)
+        {
+            this.FillCellDirections(
+                pair.Key,
+                pair.Value,
+                0,
+                () =>
+                {
+                    remainingCells--;
+
+                    if (remainingCells <= 0)
+                        onComplete?.Invoke();
+                }
+            );
         }
     }
+    private void FillCellDirections(
+    JellyCellCtrl jellyCell,
+    List<JellyDirection> directions,
+    int index,
+    System.Action onComplete)
+    {
+        if (jellyCell == null || index >= directions.Count)
+        {
+            onComplete?.Invoke();
+            return;
+        }
 
-    private void FillCell(JellyCellCtrl jellyCell, JellyDirection direction)
+        this.FillCell(
+            jellyCell,
+            directions[index],
+            () =>
+            {
+                this.FillCellDirections(
+                    jellyCell,
+                    directions,
+                    index + 1,
+                    onComplete
+                );
+            }
+        );
+    }
+    private void AddFillRequest(
+    Dictionary<JellyCellCtrl, List<JellyDirection>> fillRequests,
+    JellyCellCtrl jellyCell,
+    JellyDirection direction)
     {
         if (jellyCell == null) return;
 
-        // Tìm các slot đang trống trong JellyCell.
+        if (!fillRequests.TryGetValue(jellyCell, out List<JellyDirection> directions))
+        {
+            directions = new List<JellyDirection>();
+            fillRequests.Add(jellyCell, directions);
+        }
+
+        if (!directions.Contains(direction))
+        {
+            directions.Add(direction);
+        }
+    }
+    private void FillCell(
+    JellyCellCtrl jellyCell,
+    JellyDirection direction,
+    System.Action onComplete = null)
+    {
+        if (jellyCell == null)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
         List<JellySlotType> emptySlots = this.GetEmptySlots(jellyCell);
 
-        if (emptySlots.Count == 0) return;
+        if (emptySlots.Count == 0)
+        {
+            onComplete?.Invoke();
+            return;
+        }
 
-        // Tìm Piece phù hợp để fill vào từng slot trống.
-        // Piece có ít slot hơn sẽ được ưu tiên trước.
         Dictionary<JellyPieceCtrl, List<JellySlotType>> sourcePieces =
             this.FindFillSourcePieces(jellyCell, emptySlots, direction);
+
+        if (sourcePieces.Count == 0)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        int remainingAnimations = sourcePieces.Count;
 
         foreach (KeyValuePair<JellyPieceCtrl, List<JellySlotType>> pair in sourcePieces)
         {
             JellyPieceCtrl piece = pair.Key;
             List<JellySlotType> targetSlots = pair.Value;
 
-            // Animate Piece tràn từ vị trí hiện tại sang các slot mới.
-            // Slot chỉ được cập nhật vào Config sau khi animation hoàn thành.
             piece.JellyPieceFillAnimator.PlayFill(
-            jellyCell.JellyCellArrange,
-            piece,
-            targetSlots,
-            () =>
-            {
-                // Cập nhật lại offset để DragHandler không bị lệch
-                // sau khi Piece đã thay đổi vị trí và kích thước.
-                jellyCell.JellyCellDragHandler.CachePieceOffsets();
-            }
-        );
+                jellyCell.JellyCellArrange,
+                piece,
+                targetSlots,
+                () =>
+                {
+                    jellyCell.JellyCellDragHandler.CachePieceOffsets();
+
+                    remainingAnimations--;
+
+                    if (remainingAnimations <= 0)
+                        onComplete?.Invoke();
+                }
+            );
         }
     }
 
@@ -210,15 +300,12 @@ public class MatchResolver
     }
 
     private int GetFillPriority(
-        JellySlotType sourceSlot,
-        JellySlotType targetSlot,
-        JellyDirection direction)
+    JellySlotType sourceSlot,
+    JellySlotType targetSlot,
+    JellyDirection direction)
     {
-        // Ưu tiên Piece fill theo hướng ngược lại với hướng match.
-        if (this.CanFillToSlot(
-            sourceSlot,
-            targetSlot,
-            this.GetOppositeDirection(direction)))
+        // Ưu tiên Piece fill đúng theo hướng Resolve.
+        if (this.CanFillToSlot(sourceSlot, targetSlot, direction))
         {
             return 2;
         }

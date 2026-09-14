@@ -135,11 +135,47 @@ public class JellyCellDragHandler : JellyCellAbstract,
 
     private void ProcessDrop()
     {
-        GridModel<BoardSlot> grid = BoardManager.Instance.BoardBuilder.Grid;
+        this.isClocking = true;
 
-        BoardSlot placedSlot = this.jellyCellCtrl.JellyCellDropHandler.HandleDrop();
-        MatchResult matchResult = BoardManager.Instance.MatchFinder.FindMatches(placedSlot, grid);
+        GridModel<BoardSlot> grid = BoardManager.Instance.Grid;
 
-        BoardManager.Instance.MatchResolver.Resolve(matchResult, grid);
+        bool placed = this.jellyCellCtrl.JellyCellDropHandler.HandleDrop();
+
+        if (!placed)
+        {
+            this.isClocking = false;
+            return;
+        }
+
+        BoardManager.Instance.StartCoroutine(BoardManager.Instance.ResolveChain(grid));
+        BoardManager.Instance.BoardBuilder.SpawnPlayerJellyCells();
+    }
+
+    public void SnapToBoard(BoardSlot targetSlot)
+    {
+        if (targetSlot == null) return;
+
+        Vector2Int gridPos = targetSlot.GridPos;
+
+        Vector3 boardPosition =
+            BoardManager.Instance.BoardBuilder.GetBoardPosition(gridPos.x, gridPos.y);
+
+        // Đưa JellyCell về đúng vị trí Board
+        this.jellyCellCtrl.transform.position = boardPosition;
+        this.jellyCellCtrl.JellyCellConfig.SetGridPos(gridPos.x, gridPos.y);
+        // this.jellyCellCtrl.JellyCellConfig.SetJellyPosition();
+
+        // Đưa JellyPiece về layout chuẩn của Board
+        foreach (JellyPieceCtrl jellyPiece in this.jellyCellCtrl.JellyCellConfig.JellyPieces)
+        {
+            this.jellyCellCtrl.JellyCellArrange.ArrangePiece(jellyPiece);
+        }
+
+        // Lưu lại offset mới
+        this.CachePieceOffsets();
+
+        // Gắn JellyCell vào BoardSlot
+        targetSlot.SetJellyCell(this.jellyCellCtrl);
+        this.jellyCellCtrl.JellyCellConfig.SetCurrentSlot(targetSlot);
     }
 }

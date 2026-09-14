@@ -44,6 +44,44 @@ public class MatchFinder
         return matchResult;
     }
 
+    public MatchResult FindAllMatches(GridModel<BoardSlot> grid)
+    {
+        MatchResult matchResult = new();
+
+        for (int x = 0; x < grid.Width; x++)
+        {
+            for (int y = 0; y < grid.Height; y++)
+            {
+                BoardSlot currentSlot = grid.Get(x, y);
+
+                if (currentSlot == null || currentSlot.IsEmpty())
+                    continue;
+
+                JellyCellCtrl currentCell = currentSlot.CurrentJellyCell;
+                Vector2Int currentPos = currentCell.JellyCellConfig.GridPos;
+
+                // Chỉ kiểm tra Right và Down để mỗi cặp Cell chỉ được kiểm tra một lần.
+                this.CheckNeighbor(
+                    currentCell,
+                    currentPos + Vector2Int.right,
+                    JellyDirection.Right,
+                    grid,
+                    matchResult
+                );
+
+                this.CheckNeighbor(
+                    currentCell,
+                    currentPos + Vector2Int.up,
+                    JellyDirection.Down,
+                    grid,
+                    matchResult
+                );
+            }
+        }
+
+        return matchResult;
+    }
+    
     private void CheckNeighbor(
         JellyCellCtrl currentCell,
         Vector2Int neighborPos,

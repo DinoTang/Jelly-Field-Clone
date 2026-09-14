@@ -14,24 +14,21 @@ public class JellyCellDropHandler : JellyCellAbstract
 
         jellyCellCtrl.JellyCellConfig.SetGridPos(slot.GridPos.x, slot.GridPos.y);
 
-        slot.SetJellyCell(jellyCellCtrl);
+        this.jellyCellCtrl.JellyCellDragHandler.SnapToBoard(slot);
     }
 
-    public BoardSlot HandleDrop()
+    public bool HandleDrop()
     {
-        if (hoverSlot == null)
+        if (this.hoverSlot == null)
         {
             this.jellyCellCtrl.JellyCellDragHandler.ReturnPosition();
             this.ResetHoverSlot();
-            return null;
+            return false;
         }
 
-        BoardSlot placedSlot = hoverSlot;
-
-        this.PlaceJellyCell(placedSlot);
+        this.PlaceJellyCell(this.hoverSlot);
         this.ResetHoverSlot();
-
-        return placedSlot;
+        return true;
     }
 
     private BoardSlot FindNearestSlot(Vector3 position)
@@ -65,7 +62,7 @@ public class JellyCellDropHandler : JellyCellAbstract
 
         if (nearestSlot == null)
         {
-            ResetHoverSlot();
+            this.ResetHoverSlot();
             return;
         }
 
@@ -75,7 +72,7 @@ public class JellyCellDropHandler : JellyCellAbstract
         {
             if (hoverSlot != nearestSlot)
             {
-                ResetHoverSlot();
+                this.ResetHoverSlot();
 
                 hoverSlot = nearestSlot;
                 hoverSlot.ShowHint();
@@ -83,7 +80,7 @@ public class JellyCellDropHandler : JellyCellAbstract
         }
         else
         {
-            ResetHoverSlot();
+            this.ResetHoverSlot();
         }
     }
 

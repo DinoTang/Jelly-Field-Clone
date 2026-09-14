@@ -158,6 +158,20 @@ public class JellyLevelSOEditor : Editor
         }
 
         // =====================================================
+        // SPAWN POINTS
+        // =====================================================
+
+        EditorGUILayout.Space(15);
+
+        SerializedProperty spawnPointsProperty =
+            serializedObject.FindProperty("spawnPoints");
+
+        EditorGUILayout.PropertyField(
+            spawnPointsProperty,
+            true
+        );
+
+        // =====================================================
         // JELLY CELLS
         // =====================================================
 

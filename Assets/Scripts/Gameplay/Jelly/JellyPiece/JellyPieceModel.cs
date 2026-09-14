@@ -31,24 +31,24 @@ public class JellyPieceModel : JellyPieceAbstract
         Material material = this.jellyPieceCtrl.JellyPieceConfig.JellyMaterialSO.GetMaterial(this.color);
         this.meshRenderer.sharedMaterial = material;
     }
-    
+
     public void SetSizeQuarter()
     {
-        this.transform.localScale = new Vector3(18, 18, 35);
+        this.transform.localScale = this.jellyPieceCtrl.JellyPieceConfig.JellyPieceSizeConfig.Quarter;
     }
 
     public void SetSizeHalfHorizontal()
     {
-        this.transform.localScale = new Vector3(36, 18, 35);
+        this.transform.localScale = this.jellyPieceCtrl.JellyPieceConfig.JellyPieceSizeConfig.HalfHorizontal;
     }
 
     public void SetSizeHalfVertical()
     {
-        this.transform.localScale = new Vector3(18, 36, 35);
+        this.transform.localScale = this.jellyPieceCtrl.JellyPieceConfig.JellyPieceSizeConfig.HalfVertical;
     }
 
     public void SetSizeFull()
     {
-        this.transform.localScale = new Vector3(36, 36, 35);
+        this.transform.localScale = this.jellyPieceCtrl.JellyPieceConfig.JellyPieceSizeConfig.Full;
     }
 }

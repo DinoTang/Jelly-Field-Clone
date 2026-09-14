@@ -31,7 +31,7 @@ public class JellyPieceFillAnimator : JellyPieceAbstract
             finalSlots.Add(slot);
       }
 
-      arrange.GetArrangeData(finalSlots, out Vector3 targetPosition, out Vector3 targetScale);
+      arrange.GetArrangeData(jellyPiece, finalSlots, out Vector3 targetPosition, out Vector3 targetScale);
 
       this.KillTween();
 

@@ -12,7 +12,7 @@ public class JellyCellConfig : JellyCellAbstract
 
     public Vector2Int GridPos => gridPos;
     public List<JellyPieceCtrl> JellyPieces => jellyPieces;
-
+    public float JellyOffsetZ => jellyOffsetZ;
     public void SetGridPos(int x, int y)
     {
         this.gridPos = new Vector2Int(x, y);
@@ -40,7 +40,7 @@ public class JellyCellConfig : JellyCellAbstract
     {
         return slotPosition + new Vector3(0, 0, jellyOffsetZ);
     }
-    
+
     public void AddJellyPieces(JellyPieceCtrl pieces)
     {
         this.jellyPieces.Add(pieces);
