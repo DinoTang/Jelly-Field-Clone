@@ -2,49 +2,47 @@ using System.Collections.Generic;
 
 public class MatchResult
 {
-    private readonly Dictionary<JellyCellCtrl, List<JellyPieceCtrl>> matchedPieces;
-    public Dictionary<JellyCellCtrl, List<JellyPieceCtrl>> MatchedPieces => matchedPieces;
+    private readonly List<MatchData> matches;
+
+    public List<MatchData> Matches => this.matches;
+
+    public MatchResult()
+    {
+        this.matches = new List<MatchData>();
+    }
 
     public bool HasMatch()
     {
-        return this.matchedPieces.Count > 0;
-    }
-    public MatchResult()
-    {
-        this.matchedPieces = new Dictionary<JellyCellCtrl, List<JellyPieceCtrl>>();
+        return this.matches.Count > 0;
     }
 
-    public void AddMatch(JellyCellCtrl jellyCell, JellyPieceCtrl jellyPiece)
+    public MatchData GetOrCreateMatch(JellyCellCtrl currentCell, JellyCellCtrl neighborCell, JellyDirection direction)
     {
-        if (!this.matchedPieces.TryGetValue(jellyCell, out List<JellyPieceCtrl> pieces))
+        foreach (MatchData match in this.matches)
         {
-            pieces = new List<JellyPieceCtrl>();
-            this.matchedPieces.Add(jellyCell, pieces);
+            if (match.CurrentCell == currentCell &&
+                match.NeighborCell == neighborCell &&
+                match.Direction == direction)
+            {
+                return match;
+            }
         }
 
-        if (!pieces.Contains(jellyPiece))
-            pieces.Add(jellyPiece);
-    }
+        MatchData newMatch = new(currentCell, neighborCell, direction);
+        this.matches.Add(newMatch);
 
-    public List<JellyPieceCtrl> GetMatchedPieces(JellyCellCtrl jellyCell)
-    {
-        if (this.matchedPieces.TryGetValue(jellyCell, out List<JellyPieceCtrl> pieces))
-            return pieces;
-
-        return new List<JellyPieceCtrl>();
-    }
-
-    public List<JellyCellCtrl> GetMatchedCells()
-    {
-        return new List<JellyCellCtrl>(this.matchedPieces.Keys);
+        return newMatch;
     }
 
     public int GetMatchedPieceCount()
     {
         int count = 0;
 
-        foreach (List<JellyPieceCtrl> pieces in this.matchedPieces.Values)
-            count += pieces.Count;
+        foreach (MatchData match in this.matches)
+        {
+            count += match.CurrentPieces.Count;
+            count += match.NeighborPieces.Count;
+        }
 
         return count;
     }

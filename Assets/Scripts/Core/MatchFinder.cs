@@ -67,12 +67,13 @@ public class MatchFinder
         JellySlotType[] neighborSlots = this.GetNeighborSideSlots(direction);
 
 
-        this.FindMatchingPieces(currentCell, neighborCell, currentSlots, neighborSlots, matchResult);
+        this.FindMatchingPieces(currentCell, neighborCell, direction, currentSlots, neighborSlots, matchResult);
     }
 
     private void FindMatchingPieces(
      JellyCellCtrl currentCell,
      JellyCellCtrl neighborCell,
+     JellyDirection direction,
      JellySlotType[] currentSlots,
      JellySlotType[] neighborSlots,
      MatchResult matchResult)
@@ -92,8 +93,10 @@ public class MatchFinder
 
                     if (!IsSameColor(currentPiece, neighborPiece)) continue;
 
-                    matchResult.AddMatch(currentCell, currentPiece);
-                    matchResult.AddMatch(neighborCell, neighborPiece);
+                    MatchData match = matchResult.GetOrCreateMatch(currentCell, neighborCell, direction);
+
+                    match.AddCurrentPiece(currentPiece);
+                    match.AddNeighborPiece(neighborPiece);
                 }
             }
         }

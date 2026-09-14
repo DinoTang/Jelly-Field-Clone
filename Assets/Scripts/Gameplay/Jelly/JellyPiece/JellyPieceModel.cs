@@ -31,6 +31,7 @@ public class JellyPieceModel : JellyPieceAbstract
         Material material = this.jellyPieceCtrl.JellyPieceConfig.JellyMaterialSO.GetMaterial(this.color);
         this.meshRenderer.sharedMaterial = material;
     }
+    
     public void SetSizeQuarter()
     {
         this.transform.localScale = new Vector3(18, 18, 35);
