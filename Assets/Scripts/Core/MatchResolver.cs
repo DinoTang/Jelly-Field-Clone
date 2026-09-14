@@ -86,10 +86,13 @@ public class MatchResolver
     {
         if (jellyCell == null) return;
 
+        // Tìm các slot đang trống trong JellyCell.
         List<JellySlotType> emptySlots = this.GetEmptySlots(jellyCell);
 
         if (emptySlots.Count == 0) return;
 
+        // Tìm Piece phù hợp để fill vào từng slot trống.
+        // Piece có ít slot hơn sẽ được ưu tiên trước.
         Dictionary<JellyPieceCtrl, List<JellySlotType>> sourcePieces =
             this.FindFillSourcePieces(jellyCell, emptySlots, direction);
 
@@ -98,15 +101,19 @@ public class MatchResolver
             JellyPieceCtrl piece = pair.Key;
             List<JellySlotType> targetSlots = pair.Value;
 
-            foreach (JellySlotType targetSlot in targetSlots)
+            // Animate Piece tràn từ vị trí hiện tại sang các slot mới.
+            // Slot chỉ được cập nhật vào Config sau khi animation hoàn thành.
+            piece.JellyPieceFillAnimator.PlayFill(
+            jellyCell.JellyCellArrange,
+            piece,
+            targetSlots,
+            () =>
             {
-                if (!piece.JellyPieceConfig.Slots.Contains(targetSlot))
-                {
-                    piece.JellyPieceConfig.Slots.Add(targetSlot);
-                }
+                // Cập nhật lại offset để DragHandler không bị lệch
+                // sau khi Piece đã thay đổi vị trí và kích thước.
+                jellyCell.JellyCellDragHandler.CachePieceOffsets();
             }
-            jellyCell.JellyCellArrange.ArrangePiece(piece);
-            jellyCell.JellyCellDragHandler.CachePieceOffsets();
+        );
         }
     }
 
@@ -145,6 +152,7 @@ public class MatchResolver
 
         foreach (JellySlotType emptySlot in emptySlots)
         {
+            // Tìm Piece phù hợp nhất để fill vào slot trống hiện tại.
             JellyPieceCtrl bestPiece = null;
             int bestPriority = -1;
             int bestSlotCount = int.MaxValue;
@@ -157,9 +165,11 @@ public class MatchResolver
 
                 foreach (JellySlotType sourceSlot in piece.JellyPieceConfig.Slots)
                 {
+                    // Chỉ Piece có slot nằm cạnh slot trống mới có thể fill.
                     if (!this.IsAdjacentSlot(sourceSlot, emptySlot))
                         continue;
 
+                    // Tính độ ưu tiên dựa trên hướng fill.
                     int priority = this.GetFillPriority(sourceSlot, emptySlot, direction);
 
                     // Ưu tiên Piece đang chiếm ít slot hơn.
@@ -171,7 +181,7 @@ public class MatchResolver
                         continue;
                     }
 
-                    // Nếu cùng số slot thì giữ nguyên logic priority cũ.
+                    // Nếu cùng số slot, ưu tiên Piece có hướng fill phù hợp hơn.
                     if (pieceSlotCount == bestSlotCount && priority > bestPriority)
                     {
                         bestPiece = piece;
@@ -183,6 +193,7 @@ public class MatchResolver
             if (bestPiece == null)
                 continue;
 
+            // Gom các slot cần fill theo từng Piece.
             if (!sourcePieces.TryGetValue(bestPiece, out List<JellySlotType> targetSlots))
             {
                 targetSlots = new List<JellySlotType>();
@@ -203,6 +214,7 @@ public class MatchResolver
         JellySlotType targetSlot,
         JellyDirection direction)
     {
+        // Ưu tiên Piece fill theo hướng ngược lại với hướng match.
         if (this.CanFillToSlot(
             sourceSlot,
             targetSlot,
@@ -211,6 +223,7 @@ public class MatchResolver
             return 2;
         }
 
+        // Piece vẫn có thể fill nhưng không đúng hướng ưu tiên.
         return 1;
     }
 

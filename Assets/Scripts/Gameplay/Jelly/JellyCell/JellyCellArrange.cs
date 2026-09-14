@@ -99,4 +99,56 @@ public class JellyCellArrange : JellyCellAbstract
                (a == JellySlotType.BottomLeft && b == JellySlotType.BottomRight) ||
                (a == JellySlotType.BottomRight && b == JellySlotType.BottomLeft);
     }
+
+    public void GetArrangeData(List<JellySlotType> slots, out Vector3 position, out Vector3 scale)
+    {
+        position = transform.position;
+        scale = new Vector3(18f, 18f, 35f);
+
+        if (slots == null || slots.Count == 0) return;
+
+        if (slots.Count == 1)
+        {
+            position = this.GetSlotTransform(slots[0]).position;
+            scale = new Vector3(18f, 18f, 35f);
+            return;
+        }
+
+        if (slots.Count == 2)
+        {
+            Transform a = this.GetSlotTransform(slots[0]);
+            Transform b = this.GetSlotTransform(slots[1]);
+
+            position = (a.position + b.position) * 0.5f;
+            scale = this.IsHorizontal(slots[0], slots[1])
+               ? new Vector3(36f, 18f, 35f)
+               : new Vector3(18f, 36f, 35f);
+
+            return;
+        }
+
+        if (slots.Count == 3)
+        {
+            position = (
+               this.GetSlotTransform(slots[0]).position +
+               this.GetSlotTransform(slots[1]).position +
+               this.GetSlotTransform(slots[2]).position
+            ) / 3f;
+
+            scale = new Vector3(36f, 36f, 35f);
+            return;
+        }
+
+        if (slots.Count == 4)
+        {
+            position = (
+               this.topLeft.position +
+               this.topRight.position +
+               this.bottomLeft.position +
+               this.bottomRight.position
+            ) / 4f;
+
+            scale = new Vector3(36f, 36f, 35f);
+        }
+    }
 }

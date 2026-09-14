@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class JellyPieceAbstract : BaseBehaviour
 {
-   [Header("JellyPieceAbstract")]
+   [Header("Jelly Piece Abstract")]
    [SerializeField] protected JellyPieceCtrl jellyPieceCtrl;
    protected override void LoadComponent()
    {
