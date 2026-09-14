@@ -9,39 +9,15 @@ public class JellyCellCtrl : PoolObj
     [SerializeField] protected JellyCellConfig jellyCellConfig;
     [SerializeField] protected JellyCellDragHandler jellyCellDragHandler;
     [SerializeField] protected JellyCellDropHandler jellyCellDropHandler;
+    [SerializeField] protected JellyCellDespawn jellyCellDespawn;
+    
 
     public JellyCellArrange JellyCellArrange => jellyCellArrange;
     public JellyCellConfig JellyCellConfig => jellyCellConfig;
     public JellyCellDragHandler JellyCellDragHandler => jellyCellDragHandler;
     public JellyCellDropHandler JellyCellDropHandler => jellyCellDropHandler;
-
-    [SerializeField] protected BoardSlot currentSlot;
-
-    public BoardSlot CurrentSlot => currentSlot;
-
-    [SerializeField] private float jellyOffsetZ = -0.32f;
-
-    public void SetCurrentSlot(BoardSlot slot)
-    {
-        this.currentSlot = slot;
-    }
-
-    public void ClearCurrentSlot()
-    {
-        this.currentSlot = null;
-    }
-
-    // Cái này để áp thêm z cho bên BoardBuilder để lúc sinh jellyCell
-    public void SetJellyPosition()
-    {
-        transform.position += new Vector3(0, 0, this.jellyOffsetZ);
-    }
-
-    // Cái này để áp thêm z cho jellyCell lúc Move
-    public Vector3 GetJellyPosition(Vector3 slotPosition)
-    {
-        return slotPosition + new Vector3(0, 0, jellyOffsetZ);
-    }
+    public JellyCellDespawn JellyCellDespawn => jellyCellDespawn;
+    
 
     public override string GetName()
     {
@@ -55,6 +31,7 @@ public class JellyCellCtrl : PoolObj
         this.LoadJellyCellConfig();
         this.LoadJellyCellDragHandler();
         this.LoadJellyCellDropHandler();
+        this.LoadJellyCellDespawn();
     }
 
     private void LoadJellyCellArrange()
@@ -83,5 +60,12 @@ public class JellyCellCtrl : PoolObj
         if (this.jellyCellDropHandler != null) return;
         this.jellyCellDropHandler = GetComponentInChildren<JellyCellDropHandler>();
         Debug.Log(transform.name + ": LoadJellyCellDropHandler");
+    }
+
+    private void LoadJellyCellDespawn()
+    {
+        if (this.jellyCellDespawn != null) return;
+        this.jellyCellDespawn = GetComponentInChildren<JellyCellDespawn>();
+        Debug.Log(transform.name + ": LoadJellyCellDespawn");
     }
 }

@@ -153,8 +153,7 @@ MonoBehaviour:
   jellyCellConfig: {fileID: 167716323}
   jellyCellDragHandler: {fileID: 1524038643}
   jellyCellDropHandler: {fileID: 999751802}
-  currentSlot: {fileID: 0}
-  jellyOffsetZ: -0.32
+  jellyCellDespawn: {fileID: 2031753786}
 --- !u!4 &37847184
 Transform:
   m_ObjectHideFlags: 0
@@ -172,6 +171,7 @@ Transform:
   - {fileID: 167716322}
   - {fileID: 1524038642}
   - {fileID: 999751801}
+  - {fileID: 2031753785}
   m_Father: {fileID: 2102004233}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &37847185
@@ -290,7 +290,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JellyCellConfig
   jellyCellCtrl: {fileID: 37847183}
+  currentSlot: {fileID: 0}
   gridPos: {x: 0, y: 0}
+  jellyOffsetZ: -0.32
   jellyPieces: []
 --- !u!1 &220878946
 GameObject:
@@ -782,6 +784,7 @@ MonoBehaviour:
   boardOrigin: {x: 0, y: 12, z: 0}
   cellSpacing: 0.7
   boardSlotSize: 0.75
+  spawnJellyY: -3
 --- !u!1 &549808808
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,6 +1449,56 @@ MonoBehaviour:
   poolObjsList: []
   prefabs:
   - {fileID: 37847183}
+--- !u!1 &1148414187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1148414188}
+  - component: {fileID: 1148414189}
+  m_Layer: 0
+  m_Name: JellyPieceDespawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1148414188
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1148414187}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1941508193}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1148414189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1148414187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b7ab11a18f0a848a92a6cf8dc51966, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JellyPieceDespawn
+  parent: {fileID: 1941508194}
+  spawner: {fileID: 427415392}
+  lifeTime: 2
+  currentTime: 2
+  isNeedDespawn: 0
+  jellyPieceCtrl: {fileID: 0}
 --- !u!1 &1368342105
 GameObject:
   m_ObjectHideFlags: 0
@@ -1772,6 +1825,7 @@ MonoBehaviour:
   boardOrigin: {x: 0, y: 12, z: 0}
   cellSpacing: 0.725
   boardSlotSize: 0.75
+  spawnJellyY: -3
 --- !u!4 &1631699000
 Transform:
   m_ObjectHideFlags: 0
@@ -1928,6 +1982,7 @@ Transform:
   m_Children:
   - {fileID: 1629338164}
   - {fileID: 1042540646}
+  - {fileID: 1148414188}
   m_Father: {fileID: 1488154325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1941508194
@@ -1944,6 +1999,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JellyPieceCtrl
   jellyPieceModel: {fileID: 1629338167}
   jellyCellConfig: {fileID: 1042540647}
+  jellyPieceDespawn: {fileID: 1148414189}
+--- !u!1 &2031753784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2031753785}
+  - component: {fileID: 2031753786}
+  m_Layer: 0
+  m_Name: JellyCellDespawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2031753785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031753784}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 37847184}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2031753786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031753784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5b2a9fe9e24fd4ba06d0f5f10b22cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JellyCellDespawn
+  parent: {fileID: 37847183}
+  spawner: {fileID: 1053560509}
+  lifeTime: 2
+  currentTime: 2
+  isNeedDespawn: 0
+  jellyCellCtrl: {fileID: 0}
 --- !u!1 &2102004232
 GameObject:
   m_ObjectHideFlags: 0
@@ -2095,6 +2201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoardSlot
   currentJellyCell: {fileID: 0}
+  gridPos: {x: 0, y: 0}
 --- !u!23 &5808860593952235390
 MeshRenderer:
   m_ObjectHideFlags: 0

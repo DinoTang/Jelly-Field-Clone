@@ -43,47 +43,31 @@ public class JellyCellDragHandler : JellyCellAbstract,
     public void OnPointerDown(PointerEventData eventData)
     {
         if (this.isClocking) return;
-
-        this.SaveStartPos();
-
-        // bỏ slot cũ khi bắt đầu kéo
-        this.RemoveJellyCellFromOldSlot();
-
-        // tính khoảng lệch giữa pos JellyCell và pos chuột lúc bắt đầu kéo
-        this.CacheDragOffset(eventData);
-
-        Debug.Log("Start Drag");
+        this.StartDrag(eventData);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (this.isClocking) return;
-
-        // Lấy vị trí cần tới
-        Vector3 targetPosition = this.GetDragPosition(eventData);
-
-        // Đồng bộ vị trí giữa jellyPiece và jellyCell
-        this.SyncPosition(targetPosition);
-
-        this.jellyCellCtrl.JellyCellDropHandler.UpdatePlacementPreview();
+        this.UpdateDrag(eventData);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         if (this.isClocking) return;
-
-        this.jellyCellCtrl.JellyCellDropHandler.HandleDrop();
+        this.ProcessDrop();
     }
-
 
     public void SaveStartPos()
     {
         this.dragStartPosition = transform.parent.position;
     }
+
     public void ReturnPosition()
     {
         this.jellyCellCtrl.JellyCellDragHandler.SyncPosition(this.dragStartPosition);
     }
+
     public void CachePieceOffsets()
     {
         foreach (JellyPieceCtrl jellyPiece in this.jellyCellCtrl.JellyCellConfig.JellyPieces)
@@ -106,10 +90,10 @@ public class JellyCellDragHandler : JellyCellAbstract,
     }
     private void RemoveJellyCellFromOldSlot()
     {
-        if (this.jellyCellCtrl.CurrentSlot != null)
+        if (this.jellyCellCtrl.JellyCellConfig.CurrentSlot != null)
         {
-            this.jellyCellCtrl.CurrentSlot.RemoveJellyCell();
-            this.jellyCellCtrl.ClearCurrentSlot();
+            this.jellyCellCtrl.JellyCellConfig.CurrentSlot.RemoveJellyCell();
+            this.jellyCellCtrl.JellyCellConfig.ClearCurrentSlot();
         }
     }
 
@@ -127,4 +111,35 @@ public class JellyCellDragHandler : JellyCellAbstract,
         return mouseWorld + this.dragOffset;
     }
 
+    private void StartDrag(PointerEventData eventData)
+    {
+        this.SaveStartPos();
+
+        // bỏ slot cũ khi bắt đầu kéo
+        this.RemoveJellyCellFromOldSlot();
+
+        // tính khoảng lệch giữa pos JellyCell và pos chuột lúc bắt đầu kéo
+        this.CacheDragOffset(eventData);
+    }
+
+    private void UpdateDrag(PointerEventData eventData)
+    {
+        // Lấy vị trí cần tới
+        Vector3 targetPosition = this.GetDragPosition(eventData);
+
+        // Đồng bộ vị trí giữa jellyPiece và jellyCell
+        this.SyncPosition(targetPosition);
+
+        this.jellyCellCtrl.JellyCellDropHandler.UpdatePlacementPreview();
+    }
+
+    private void ProcessDrop()
+    {
+        GridModel<BoardSlot> grid = BoardManager.Instance.BoardBuilder.Grid;
+
+        BoardSlot placedSlot = this.jellyCellCtrl.JellyCellDropHandler.HandleDrop();
+        MatchResult matchResult = BoardManager.Instance.MatchFinder.FindMatches(placedSlot, grid);
+
+        BoardManager.Instance.MatchResolver.Resolve(matchResult, grid);
+    }
 }

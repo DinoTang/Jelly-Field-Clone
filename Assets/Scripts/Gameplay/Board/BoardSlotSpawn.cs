@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JellyCellSpawner : Spawner<JellyCellCtrl>
+public class BoardSlotSpawn : Spawner<BoardSlot>
 {
 
 }

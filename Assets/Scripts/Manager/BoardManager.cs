@@ -2,13 +2,20 @@ using UnityEngine;
 
 public class BoardManager : Singleton<BoardManager>
 {
+   [Header("Board Manager")]
    [SerializeField] protected JellyLevelSO levelData;
    [SerializeField] protected BoardBuilder boardBuilder;
    [SerializeField] protected BoardCameraCtrl boardCameraCtrl;
    [SerializeField] protected BoardPlacementPreview boardPlacementPreview;
 
+   private readonly MatchFinder matchFinder = new();
+   private readonly MatchResult matchResult = new();
+   private readonly MatchResolver matchResolver = new();
    public BoardBuilder BoardBuilder => boardBuilder;
    public BoardPlacementPreview BoardPlacementPreview => boardPlacementPreview;
+   public MatchFinder MatchFinder => matchFinder;
+   public MatchResult MatchResult => matchResult;
+   public MatchResolver MatchResolver => matchResolver;
 
    protected override void Start()
    {

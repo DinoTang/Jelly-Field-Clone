@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BoardBuilder : BaseBehaviour
 {
-   [SerializeField] private BoardSlotSpawner boardSlotSpawner;
-   [SerializeField] private JellyCellSpawner jellyCellSpawner;
-   [SerializeField] private JellyPieceSpawner jellyPieceSpawner;
+   [SerializeField] private BoardSlotSpawn boardSlotSpawner;
+   [SerializeField] private JellyCellSpawn jellyCellSpawner;
+   [SerializeField] private JellyPieceSpawn jellyPieceSpawner;
    [SerializeField] private Vector3 boardOrigin = new(0f, 12f, 0f);
    [SerializeField] private float cellSpacing = 0.725f;
    [SerializeField] private float boardSlotSize = 0.75f;
@@ -24,21 +24,21 @@ public class BoardBuilder : BaseBehaviour
    private void LoadBoardSlotSpawner()
    {
       if (this.boardSlotSpawner != null) return;
-      this.boardSlotSpawner = FindAnyObjectByType<BoardSlotSpawner>();
+      this.boardSlotSpawner = FindAnyObjectByType<BoardSlotSpawn>();
       Debug.Log(this.transform.name + ": LoadBoardSlotSpawner");
    }
 
    private void LoadJellyCellSpawner()
    {
       if (this.jellyCellSpawner != null) return;
-      this.jellyCellSpawner = FindAnyObjectByType<JellyCellSpawner>();
+      this.jellyCellSpawner = FindAnyObjectByType<JellyCellSpawn>();
       Debug.Log(this.transform.name + ": LoadJellyCellSpawner");
    }
 
    private void LoadJellyPieceSpawner()
    {
       if (this.jellyPieceSpawner != null) return;
-      this.jellyPieceSpawner = FindAnyObjectByType<JellyPieceSpawner>();
+      this.jellyPieceSpawner = FindAnyObjectByType<JellyPieceSpawn>();
       Debug.Log(this.transform.name + ": LoadJellyPieceSpawner");
    }
 
@@ -55,6 +55,7 @@ public class BoardBuilder : BaseBehaviour
             Vector3 slotPos = this.GetBoardPosition(x, y, levelData);
 
             BoardSlot slot = boardSlotSpawner.Spawn("BoardSlot", slotPos);
+            slot.SetGridPos(x, y);
             slot.transform.localScale = Vector3.one * boardSlotSize;
 
             this.grid.Set(x, y, slot);
@@ -93,7 +94,7 @@ public class BoardBuilder : BaseBehaviour
 
       // SetData cho jellyCellCtrl
       jellyCellCtrl.JellyCellConfig.SetGridPos(x, y);
-      jellyCellCtrl.SetJellyPosition();
+      jellyCellCtrl.JellyCellConfig.SetJellyPosition();
 
       slot.SetJellyCell(jellyCellCtrl);
 
@@ -166,6 +167,8 @@ public class BoardBuilder : BaseBehaviour
           spawnPosition
       );
 
+      jellyCellCtrl.JellyCellConfig.SetGridPos(-1, -1);
+      jellyCellCtrl.JellyCellConfig.SetJellyPosition();
 
       jellyCellCtrl.JellyCellDragHandler.CachePieceOffsets();
       jellyCellCtrl.JellyCellDragHandler.SetIsClocking(false);

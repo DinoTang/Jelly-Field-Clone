@@ -8,19 +8,30 @@ public class JellyCellDropHandler : JellyCellAbstract
 
     private void PlaceJellyCell(BoardSlot slot)
     {
-        Vector3 position = jellyCellCtrl.GetJellyPosition(slot.transform.position);
+        Vector3 position = jellyCellCtrl.JellyCellConfig.GetJellyPosition(slot.transform.position);
 
         this.jellyCellCtrl.JellyCellDragHandler.SyncPosition(position);
+
+        jellyCellCtrl.JellyCellConfig.SetGridPos(slot.GridPos.x, slot.GridPos.y);
 
         slot.SetJellyCell(jellyCellCtrl);
     }
 
-    public void HandleDrop()
+    public BoardSlot HandleDrop()
     {
-        if (hoverSlot != null) this.PlaceJellyCell(hoverSlot);
-        else this.jellyCellCtrl.JellyCellDragHandler.ReturnPosition();
+        if (hoverSlot == null)
+        {
+            this.jellyCellCtrl.JellyCellDragHandler.ReturnPosition();
+            this.ResetHoverSlot();
+            return null;
+        }
 
+        BoardSlot placedSlot = hoverSlot;
+
+        this.PlaceJellyCell(placedSlot);
         this.ResetHoverSlot();
+
+        return placedSlot;
     }
 
     private BoardSlot FindNearestSlot(Vector3 position)

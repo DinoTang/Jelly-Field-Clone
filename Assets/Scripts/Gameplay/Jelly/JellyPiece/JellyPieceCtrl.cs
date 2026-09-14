@@ -5,9 +5,11 @@ public class JellyPieceCtrl : PoolObj
 {
    [Header("Jelly Piece Ctrl")]
    [SerializeField] protected JellyPieceModel jellyPieceModel;
-   public JellyPieceModel JellyPieceModel => jellyPieceModel;
-
    [SerializeField] protected JellyPieceConfig jellyCellConfig;
+   [SerializeField] protected JellyPieceDespawn jellyPieceDespawn;
+
+   public JellyPieceDespawn JellyPieceDespawn => jellyPieceDespawn;
+   public JellyPieceModel JellyPieceModel => jellyPieceModel;
    public JellyPieceConfig JellyPieceConfig => jellyCellConfig;
 
    public override string GetName()
@@ -20,6 +22,7 @@ public class JellyPieceCtrl : PoolObj
       base.LoadComponent();
       this.LoadJellyPieceModel();
       this.LoadJellyCellConfig();
+      this.LoadJellyCellDespawn();
    }
 
    private void LoadJellyPieceModel()
@@ -34,5 +37,12 @@ public class JellyPieceCtrl : PoolObj
       if (this.jellyCellConfig != null) return;
       this.jellyCellConfig = GetComponentInChildren<JellyPieceConfig>();
       Debug.Log(transform.name + ": LoadJellyCellConfig");
+   }
+
+   private void LoadJellyCellDespawn()
+   {
+      if (this.jellyPieceDespawn != null) return;
+      this.jellyPieceDespawn = GetComponentInChildren<JellyPieceDespawn>();
+      Debug.Log(transform.name + ": LoadJellyCellDespawn");
    }
 }

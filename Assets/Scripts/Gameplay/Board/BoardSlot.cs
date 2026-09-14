@@ -5,6 +5,15 @@ public class BoardSlot : PoolObj
    [SerializeField] protected JellyCellCtrl currentJellyCell;
    public JellyCellCtrl CurrentJellyCell => currentJellyCell;
 
+   [SerializeField] private Vector2Int gridPos;
+
+   public Vector2Int GridPos => gridPos;
+
+   public void SetGridPos(int x, int y)
+   {
+      this.gridPos = new Vector2Int(x, y);
+   }
+
    public bool IsEmpty()
    {
       return currentJellyCell == null;
@@ -14,7 +23,7 @@ public class BoardSlot : PoolObj
    {
       this.currentJellyCell = jellyCell;
 
-      jellyCell.SetCurrentSlot(this);
+      jellyCell.JellyCellConfig.SetCurrentSlot(this);
    }
 
    public void RemoveJellyCell()
