@@ -12,6 +12,7 @@ public class JellyCellDragHandler : JellyCellAbstract,
     [Header("Jelly Cell Drag Handler")]
     [SerializeField] protected bool isClocking = true;
     [SerializeField] protected Vector3 dragOffset;
+    [SerializeField] private Vector3 spawnPoint;
     [SerializeField] protected BoxCollider boxCollider;
 
     public BoxCollider BoxCollider => boxCollider;
@@ -25,7 +26,10 @@ public class JellyCellDragHandler : JellyCellAbstract,
     {
         this.isClocking = isClocking;
     }
-
+    public void SetSpawnPoint(Vector3 spawnPoint)
+    {
+        this.spawnPoint = spawnPoint;
+    }
     protected override void LoadComponent()
     {
         base.LoadComponent();
@@ -148,7 +152,8 @@ public class JellyCellDragHandler : JellyCellAbstract,
         }
 
         BoardManager.Instance.StartCoroutine(BoardManager.Instance.ResolveChain(grid));
-        BoardManager.Instance.BoardBuilder.SpawnPlayerJellyCells();
+
+        BoardManager.Instance.BoardBuilder.SpawnPlayerJellyCellAfterDrop(this.GetSpawnPointOrigin());
     }
 
     public void SnapToBoard(BoardSlot targetSlot)
@@ -177,5 +182,14 @@ public class JellyCellDragHandler : JellyCellAbstract,
         // Gắn JellyCell vào BoardSlot
         targetSlot.SetJellyCell(this.jellyCellCtrl);
         this.jellyCellCtrl.JellyCellConfig.SetCurrentSlot(targetSlot);
+    }
+
+    private Vector3 GetSpawnPointOrigin()
+    {
+        float yPos = BoardManager.Instance.BoardBuilder.PlayerJellyOffsetY;
+        Vector3 spawnPointOrigin = new Vector3(0, yPos, 0) * -1;
+        spawnPointOrigin += this.spawnPoint;
+
+        return spawnPointOrigin;
     }
 }

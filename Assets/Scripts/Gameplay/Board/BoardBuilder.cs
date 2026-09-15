@@ -18,6 +18,7 @@ public class BoardBuilder : BoardManagerAbstract
 
    public float CellSpacing => cellSpacing;
    public Vector3 BoardOrigin => boardOrigin;
+   public float PlayerJellyOffsetY => playerJellyOffsetY;
    protected override void LoadComponent()
    {
       base.LoadComponent();
@@ -136,6 +137,10 @@ public class BoardBuilder : BoardManagerAbstract
 
       jellyCellCtrl.JellyCellDragHandler.CachePieceOffsets();
    }
+   public void SpawnPlayerJellyCellAfterDrop(Vector3 spawnPoint)
+   {
+      this.SpawnPlayerJellyCell(spawnPoint);
+   }
 
    public void SpawnPlayerJellyCells()
    {
@@ -152,8 +157,10 @@ public class BoardBuilder : BoardManagerAbstract
    {
       spawnPosition.y += this.playerJellyOffsetY;
 
-      JellyCellCtrl jellyCellCtrl =
-          this.jellyCellSpawner.Spawn("JellyCellCtrl", spawnPosition);
+      JellyCellCtrl jellyCellCtrl = this.jellyCellSpawner.Spawn("JellyCellCtrl", spawnPosition);
+
+      // Gắn spawnPoint vào jellyCell để sau này spawn lại ngay tại đó
+      jellyCellCtrl.JellyCellDragHandler.SetSpawnPoint(spawnPosition);
 
       List<JellyPieceData> jellyPieces = this.boardManager.RandomGenerator.Generate();
 
