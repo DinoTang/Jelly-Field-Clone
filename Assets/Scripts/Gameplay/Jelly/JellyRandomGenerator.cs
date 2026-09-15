@@ -5,10 +5,11 @@ public class JellyRandomGenerator
 {
     private readonly JellyColor[] colors =
     {
-      JellyColor.Pink,
-      JellyColor.Purple,
       JellyColor.Cyan,
-      JellyColor.Yellow
+      JellyColor.Green,
+      JellyColor.Purple,
+      JellyColor.Pink,
+      JellyColor.Yellow,
    };
 
     public List<JellyPieceData> Generate()

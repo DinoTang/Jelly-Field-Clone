@@ -10,40 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 584db44d66bd71c47a0dbbc24cf24ff1, type: 3}
-  m_Name: JellyLevel_2
+  m_Name: JellyLevel_4
   m_EditorClassIdentifier: Assembly-CSharp::JellyLevelSO
-  width: 5
-  height: 3
-  validCells: 000101010001010101010001010100
+  width: 4
+  height: 4
+  validCells: 01010101010101010101010101010101
   spawnPoints:
-  - position: {x: 0.7, y: 9.65, z: 0}
-  - position: {x: 2.2, y: 9.65, z: 0}
+  - position: {x: 0, y: 9.65, z: 0}
+  - position: {x: 1.5, y: 9.65, z: 0}
   jellyCells:
-  - Position: {x: 2, y: 0}
+  - Position: {x: 1, y: 1}
     Pieces:
     - Color: 3
       Slots: 0000000001000000
-    - Color: 1
-      Slots: 0200000003000000
-  - Position: {x: 1, y: 2}
-    Pieces:
-    - Color: 1
-      Slots: 00000000
-    - Color: 4
-      Slots: 01000000
-    - Color: 3
-      Slots: 02000000
+    - Color: 5
+      Slots: 03000000
     - Color: 2
       Slots: 03000000
-  - Position: {x: 4, y: 1}
+  - Position: {x: 2, y: 2}
     Pieces:
+    - Color: 4
+      Slots: 0000000001000000
     - Color: 1
-      Slots: 00000000
-    - Color: 5
-      Slots: 0100000003000000
-    - Color: 3
       Slots: 02000000
-  - Position: {x: 3, y: 2}
-    Pieces:
     - Color: 3
-      Slots: 00000000010000000200000003000000
+      Slots: 03000000
+  goals:
+  - goal: {fileID: 11400000, guid: c071b9f4df30ffb46824e1dc6ec4eda3, type: 2}
+    targetAmount: 8
+  - goal: {fileID: 11400000, guid: 5097180ab55f6ab4e97d73fd3f22c9b5, type: 2}
+    targetAmount: 6
+  coinReward: 15

@@ -69,6 +69,8 @@ public class MatchResolver
     private void ClearPiece(JellyCellCtrl jellyCell, JellyPieceCtrl jellyPiece)
     {
         jellyCell.JellyCellConfig.RemoveJellyPiece(jellyPiece);
+        GameManager.Instance.RegisterClearedJellyPiece(jellyPiece.JellyPieceModel.Color);
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.AudioDataSO.merge);
         jellyPiece.JellyPieceDespawn.DoDespawn();
     }
 

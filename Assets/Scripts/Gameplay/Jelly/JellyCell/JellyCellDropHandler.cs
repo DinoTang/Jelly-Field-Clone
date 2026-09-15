@@ -25,7 +25,7 @@ public class JellyCellDropHandler : JellyCellAbstract
             this.ResetHoverSlot();
             return false;
         }
-
+        
         this.PlaceJellyCell(this.hoverSlot);
         this.ResetHoverSlot();
         return true;

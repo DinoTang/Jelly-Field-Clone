@@ -7,14 +7,20 @@ public class JellyPieceConfig : JellyPieceAbstract
    [SerializeField] protected JellyMaterialSO jellyMaterialSO;
    [SerializeField] protected JellyPieceSizeConfig jellyPieceSizeConfig;
    [SerializeField] protected List<JellySlotType> slots;
-
+   [SerializeField] protected JellyCellCtrl owner;
    private Vector3 offset;
 
    public JellyMaterialSO JellyMaterialSO => jellyMaterialSO;
    public JellyPieceSizeConfig JellyPieceSizeConfig => jellyPieceSizeConfig;
    public List<JellySlotType> Slots => slots;
    public Vector3 Offset => offset;
-
+   public JellyCellCtrl Owner => owner;
+   public void ResetData()
+   {
+      this.Slots.Clear();
+      this.SetOwner(null);
+      this.SetOffset(Vector3.zero);
+   }
    public void SetOffset(Vector3 offset)
    {
       this.offset = offset;
@@ -23,6 +29,11 @@ public class JellyPieceConfig : JellyPieceAbstract
    public void SetSlots(List<JellySlotType> slots)
    {
       this.slots = new List<JellySlotType>(slots);
+   }
+
+   public void SetOwner(JellyCellCtrl owner)
+   {
+      this.owner = owner;
    }
 
    protected override void LoadComponent()

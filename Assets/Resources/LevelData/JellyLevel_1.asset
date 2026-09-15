@@ -18,31 +18,17 @@ MonoBehaviour:
   spawnPoints:
   - position: {x: 1.45, y: 9.65, z: 0}
   jellyCells:
-  - Position: {x: 2, y: 0}
+  - Position: {x: 2, y: 2}
     Pieces:
-    - Color: 3
-      Slots: 0000000001000000
-    - Color: 1
-      Slots: 0200000003000000
-  - Position: {x: 1, y: 2}
-    Pieces:
-    - Color: 1
-      Slots: 00000000
     - Color: 4
-      Slots: 01000000
-    - Color: 3
-      Slots: 02000000
-    - Color: 2
-      Slots: 03000000
-  - Position: {x: 4, y: 1}
-    Pieces:
-    - Color: 1
-      Slots: 00000000
-    - Color: 5
-      Slots: 0100000003000000
-    - Color: 3
-      Slots: 02000000
+      Slots: 00000000010000000200000003000000
   - Position: {x: 3, y: 2}
     Pieces:
     - Color: 3
       Slots: 00000000010000000200000003000000
+  goals:
+  - goal: {fileID: 11400000, guid: ec47b8ccdb649274db72a5a9070e30ce, type: 2}
+    targetAmount: 5
+  - goal: {fileID: 11400000, guid: 0eea85efbd4b514449fd2e0df847c4fa, type: 2}
+    targetAmount: 5
+  coinReward: 15

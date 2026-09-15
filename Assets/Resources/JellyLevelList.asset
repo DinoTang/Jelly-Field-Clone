@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a9ad69a26460f444986c2412d845ddb, type: 3}
+  m_Name: JellyLevelList
+  m_EditorClassIdentifier: Assembly-CSharp::JellyLevelListSO
+  levels:
+  - {fileID: 11400000, guid: f7e8f293b963dc04490d9ec9cab5875a, type: 2}
+  - {fileID: 11400000, guid: 340b46b775b1bc84fa1fe2499c22874a, type: 2}
+  - {fileID: 11400000, guid: 1418eaf47c68a1c479f0f6aab51b7f94, type: 2}
+  - {fileID: 11400000, guid: b9a286e7b77c7944aaa156e72897d793, type: 2}

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74af281c32b7d5f4baf3443313beb92c, type: 3}
+  m_Name: AudioDataSO
+  m_EditorClassIdentifier: Assembly-CSharp::AudioDataSO
+  click: {fileID: 8300000, guid: c5a1898fc25365740991ce2e71c4418a, type: 3}
+  coin: {fileID: 8300000, guid: 7010ed766fcf39d4ab7411aa636de7eb, type: 3}
+  goalReached: {fileID: 8300000, guid: 6ddcf8f953fcf574aa67857fa9658b60, type: 3}
+  initJelly: {fileID: 8300000, guid: b9664996d9dc8254b8e82da78cbe091a, type: 3}
+  merge: {fileID: 8300000, guid: 93afb17ec6b7d6c47b607aa1fe5157d5, type: 3}
+  touch: {fileID: 8300000, guid: 0f3690f6c09b0474b910599c4ab08c3c, type: 3}

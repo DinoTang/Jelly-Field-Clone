@@ -9,6 +9,12 @@ public class BoardSlot : PoolObj
 
    public Vector2Int GridPos => gridPos;
 
+   public void ResetData()
+   {
+      this.currentJellyCell = null;
+      this.gridPos = new Vector2Int(-1, -1);
+   }
+
    public void SetGridPos(int x, int y)
    {
       this.gridPos = new Vector2Int(x, y);

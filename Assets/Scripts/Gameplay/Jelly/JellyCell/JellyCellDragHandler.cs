@@ -117,6 +117,8 @@ public class JellyCellDragHandler : JellyCellAbstract,
 
     private void StartDrag(PointerEventData eventData)
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.AudioDataSO.touch);
+
         this.SaveStartPos();
 
         // bỏ slot cũ khi bắt đầu kéo
@@ -142,6 +144,8 @@ public class JellyCellDragHandler : JellyCellAbstract,
         this.isClocking = true;
 
         GridModel<BoardSlot> grid = BoardManager.Instance.Grid;
+        
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.AudioDataSO.initJelly);
 
         bool placed = this.jellyCellCtrl.JellyCellDropHandler.HandleDrop();
 

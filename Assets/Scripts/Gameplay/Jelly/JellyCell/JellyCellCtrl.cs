@@ -9,15 +9,17 @@ public class JellyCellCtrl : PoolObj
     [SerializeField] protected JellyCellConfig jellyCellConfig;
     [SerializeField] protected JellyCellDragHandler jellyCellDragHandler;
     [SerializeField] protected JellyCellDropHandler jellyCellDropHandler;
+    // [SerializeField] protected JellyCellJiggleController jellyCellJiggleController;
     [SerializeField] protected JellyCellDespawn jellyCellDespawn;
-    
+
 
     public JellyCellArrange JellyCellArrange => jellyCellArrange;
     public JellyCellConfig JellyCellConfig => jellyCellConfig;
     public JellyCellDragHandler JellyCellDragHandler => jellyCellDragHandler;
     public JellyCellDropHandler JellyCellDropHandler => jellyCellDropHandler;
+    // public JellyCellJiggleController JellyCellJiggleController => jellyCellJiggleController;
     public JellyCellDespawn JellyCellDespawn => jellyCellDespawn;
-    
+
 
     public override string GetName()
     {
@@ -31,6 +33,7 @@ public class JellyCellCtrl : PoolObj
         this.LoadJellyCellConfig();
         this.LoadJellyCellDragHandler();
         this.LoadJellyCellDropHandler();
+        this.LoadJellyCellJiggleController();
         this.LoadJellyCellDespawn();
     }
 
@@ -60,6 +63,13 @@ public class JellyCellCtrl : PoolObj
         if (this.jellyCellDropHandler != null) return;
         this.jellyCellDropHandler = GetComponentInChildren<JellyCellDropHandler>();
         Debug.Log(transform.name + ": LoadJellyCellDropHandler");
+    }
+
+    private void LoadJellyCellJiggleController()
+    {
+        // if (this.jellyCellJiggleController != null) return;
+        // this.jellyCellJiggleController = GetComponentInChildren<JellyCellJiggleController>();
+        // Debug.Log(transform.name + ": LoadJellyCellJiggleController");
     }
 
     private void LoadJellyCellDespawn()

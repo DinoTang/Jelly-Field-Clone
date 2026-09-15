@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584db44d66bd71c47a0dbbc24cf24ff1, type: 3}
+  m_Name: JellyLevel_3
+  m_EditorClassIdentifier: Assembly-CSharp::JellyLevelSO
+  width: 3
+  height: 5
+  validCells: 010101010101010101010101000100
+  spawnPoints:
+  - position: {x: 0, y: 9.65, z: 0}
+  - position: {x: 1.5, y: 9.65, z: 0}
+  jellyCells:
+  - Position: {x: 0, y: 1}
+    Pieces:
+    - Color: 3
+      Slots: 00000000
+    - Color: 4
+      Slots: 03000000
+    - Color: 1
+      Slots: 0200000003000000
+  - Position: {x: 2, y: 2}
+    Pieces:
+    - Color: 2
+      Slots: 0000000001000000
+    - Color: 4
+      Slots: 02000000
+    - Color: 5
+      Slots: 03000000
+  goals:
+  - goal: {fileID: 11400000, guid: c071b9f4df30ffb46824e1dc6ec4eda3, type: 2}
+    targetAmount: 8
+  coinReward: 15

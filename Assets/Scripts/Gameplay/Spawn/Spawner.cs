@@ -126,7 +126,19 @@ public abstract class Spawner<T> : BaseBehaviour where T : PoolObj
             this.AddObjIntoPool(obj);
         }
     }
+    public virtual void DespawnAll()
+    {
+        for (int i = this.poolHolder.transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = this.poolHolder.transform.GetChild(i);
+            T obj = child.GetComponent<T>();
 
+            if (obj == null) continue;
+
+            this.Despawn(obj);
+        }
+    }
+    
     private void AddObjIntoPool(T obj)
     {
         if (obj == null) return;

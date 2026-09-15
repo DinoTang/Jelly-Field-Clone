@@ -7,7 +7,7 @@ public class JellyPieceModel : JellyPieceAbstract
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] protected JellyColor color;
     public JellyColor Color => color;
-
+    public MeshRenderer MeshRenderer => meshRenderer;
     protected override void LoadComponent()
     {
         base.LoadComponent();

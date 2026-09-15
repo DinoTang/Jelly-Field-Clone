@@ -27,6 +27,8 @@ public class JellyPieceDespawn : Despawn<JellyPieceCtrl>
         // Reset Slots của JellyPiece
         this.jellyPieceCtrl.JellyPieceConfig.Slots.Clear();
 
-
+        JellyColor color = this.jellyPieceCtrl.JellyPieceModel.Color;
+        ExplosionEffectCtrl explosionEffectCtrl = this.jellyPieceCtrl.ExplosionEffectSpawn.Spawn(color, transform.position);
+        explosionEffectCtrl.transform.position += new Vector3(0, 0, -1f);
     }
 }

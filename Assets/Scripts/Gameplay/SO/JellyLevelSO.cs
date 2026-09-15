@@ -9,12 +9,14 @@ public class JellyLevelSO : ScriptableObject
     [SerializeField] private bool[] validCells;
     [SerializeField] private List<JellySpawnPointData> spawnPoints = new();
     [SerializeField] private List<JellyCellData> jellyCells = new();
-
+    [SerializeField] private List<JellyGoalData> goals = new();
+    [SerializeField] private int coinReward = 0;
     public int Width => width;
     public int Height => height;
     public List<JellySpawnPointData> SpawnPoints => spawnPoints;
-
     public List<JellyCellData> JellyCells => jellyCells;
+    public List<JellyGoalData> Goals => goals;
+    public int CoinReward => this.coinReward;
 
     public bool IsValid(int x, int y)
     {

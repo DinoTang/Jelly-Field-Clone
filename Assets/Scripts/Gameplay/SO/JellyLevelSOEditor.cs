@@ -186,5 +186,34 @@ public class JellyLevelSOEditor : Editor
         );
 
         serializedObject.ApplyModifiedProperties();
+
+        // =====================================================
+        // GOALS
+        // =====================================================
+
+        EditorGUILayout.Space(15);
+
+        SerializedProperty goalsProperty =
+            serializedObject.FindProperty("goals");
+
+        EditorGUILayout.PropertyField(
+            goalsProperty,
+            true
+        );
+        // =====================================================
+        // REWARD
+        // =====================================================
+
+        EditorGUILayout.Space(15);
+
+        SerializedProperty coinRewardProperty =
+            serializedObject.FindProperty("coinReward");
+
+        EditorGUILayout.PropertyField(
+            coinRewardProperty,
+            new GUIContent("Coin Reward")
+        );
+
+        serializedObject.ApplyModifiedProperties();
     }
 }

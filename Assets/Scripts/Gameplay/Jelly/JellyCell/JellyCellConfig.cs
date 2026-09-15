@@ -13,6 +13,12 @@ public class JellyCellConfig : JellyCellAbstract
     public Vector2Int GridPos => gridPos;
     public List<JellyPieceCtrl> JellyPieces => jellyPieces;
     public float JellyOffsetZ => jellyOffsetZ;
+    public void ResetData()
+    {
+        this.currentSlot = null;
+        this.gridPos = new Vector2Int(-1, -1);
+        this.jellyPieces.Clear();
+    }
     public void SetGridPos(int x, int y)
     {
         this.gridPos = new Vector2Int(x, y);

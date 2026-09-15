@@ -31,6 +31,7 @@ public class BoardManager : Singleton<BoardManager>
 
    protected override void Start()
    {
+      this.levelData = GameManager.Instance.LevelData;
       this.InitGrid();
       this.boardBuilder.Build();
       this.boardCameraCtrl.CenterOnBoard(this.levelData.Width,
@@ -67,6 +68,7 @@ public class BoardManager : Singleton<BoardManager>
       Debug.Log(this.transform.name + ": LoadBoardPlacementPreview");
    }
 
+
    public IEnumerator ResolveChain(GridModel<BoardSlot> grid)
    {
       while (true)
@@ -97,5 +99,28 @@ public class BoardManager : Singleton<BoardManager>
          // Sau khi Fill xong, vòng while chạy lại
          // và tìm Match mới để tiếp tục Chain.
       }
+   }
+
+   public void ResetBoard()
+   {
+      this.StopAllCoroutines();
+
+      this.levelData = GameManager.Instance.LevelData;
+
+      this.boardBuilder.Clear();
+
+      this.grid = new GridModel<BoardSlot>(
+          this.levelData.Width,
+          this.levelData.Height
+      );
+
+      this.boardBuilder.Build();
+
+      this.boardCameraCtrl.CenterOnBoard(
+          this.levelData.Width,
+          this.levelData.Height,
+          this.boardBuilder.CellSpacing,
+          this.boardBuilder.BoardOrigin
+      );
    }
 }

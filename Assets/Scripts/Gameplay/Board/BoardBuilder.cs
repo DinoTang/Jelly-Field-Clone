@@ -28,6 +28,14 @@ public class BoardBuilder : BoardManagerAbstract
       this.LoadSpawnPointSpawn();
    }
 
+   public void Clear()
+   {
+      this.jellyPieceSpawner.DespawnAll();
+      this.jellyCellSpawner.DespawnAll();
+      this.boardSlotSpawner.DespawnAll();
+      this.spawnPointSpawner.DespawnAll();
+   }
+
    private void LoadBoardSlotSpawner()
    {
       if (this.boardSlotSpawner != null) return;
@@ -67,6 +75,7 @@ public class BoardBuilder : BoardManagerAbstract
 
             Vector3 slotPos = this.GetBoardPosition(x, y);
             BoardSlot slot = boardSlotSpawner.Spawn("BoardSlot", slotPos);
+            slot.ResetData();
 
             Vector3 slotPosition = slot.transform.position;
             slotPosition.z += this.boardSlotOffsetZ;
@@ -105,6 +114,7 @@ public class BoardBuilder : BoardManagerAbstract
 
       Vector3 jellyCellPos = this.GetBoardPosition(x, y);
       JellyCellCtrl jellyCellCtrl = this.jellyCellSpawner.Spawn("JellyCellCtrl", jellyCellPos);
+      jellyCellCtrl.JellyCellConfig.ResetData();
 
       // SetData cho jellyCellCtrl
       jellyCellCtrl.JellyCellConfig.SetGridPos(x, y);
@@ -122,11 +132,13 @@ public class BoardBuilder : BoardManagerAbstract
       foreach (JellyPieceData jellyPieceData in jellyCellData.Pieces)
       {
          JellyPieceCtrl jellyPieceCtrl = this.jellyPieceSpawner.Spawn("JellyPieceCtrl", position);
+         jellyPieceCtrl.JellyPieceConfig.ResetData();
 
          // SetData cho jellyPieceCtrl
          jellyPieceCtrl.JellyPieceModel.SetColor(jellyPieceData.Color);
          jellyPieceCtrl.JellyPieceModel.ApplyMaterialByColor();
          jellyPieceCtrl.JellyPieceConfig.SetSlots(jellyPieceData.Slots);
+         jellyPieceCtrl.JellyPieceConfig.SetOwner(jellyCellCtrl);
 
          // Đưa các jellyPiece vào danh sách chứa của jellyCell
          jellyCellCtrl.JellyCellConfig.AddJellyPieces(jellyPieceCtrl);
@@ -158,6 +170,7 @@ public class BoardBuilder : BoardManagerAbstract
       spawnPosition.y += this.playerJellyOffsetY;
 
       JellyCellCtrl jellyCellCtrl = this.jellyCellSpawner.Spawn("JellyCellCtrl", spawnPosition);
+      jellyCellCtrl.JellyCellConfig.ResetData();
 
       // Gắn spawnPoint vào jellyCell để sau này spawn lại ngay tại đó
       jellyCellCtrl.JellyCellDragHandler.SetSpawnPoint(spawnPosition);
@@ -169,12 +182,13 @@ public class BoardBuilder : BoardManagerAbstract
 
       foreach (JellyPieceData jellyPieceData in jellyPieces)
       {
-         JellyPieceCtrl jellyPieceCtrl =
-             this.jellyPieceSpawner.Spawn("JellyPieceCtrl", spawnPosition);
+         JellyPieceCtrl jellyPieceCtrl = this.jellyPieceSpawner.Spawn("JellyPieceCtrl", spawnPosition);
+         jellyPieceCtrl.JellyPieceConfig.ResetData();
 
          jellyPieceCtrl.JellyPieceModel.SetColor(jellyPieceData.Color);
          jellyPieceCtrl.JellyPieceModel.ApplyMaterialByColor();
          jellyPieceCtrl.JellyPieceConfig.SetSlots(jellyPieceData.Slots);
+         jellyPieceCtrl.JellyPieceConfig.SetOwner(jellyCellCtrl);
 
          jellyCellCtrl.JellyCellConfig.AddJellyPieces(jellyPieceCtrl);
 
