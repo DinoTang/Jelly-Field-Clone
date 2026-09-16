@@ -44,12 +44,31 @@ public class JellyLevelSO : ScriptableObject
         if (newWidth == width && newHeight == height)
             return;
 
+        bool[] oldValidCells = this.validCells;
+        int oldWidth = width;
+        int oldHeight = height;
+
         width = newWidth;
         height = newHeight;
 
         validCells = new bool[width * height];
 
-        for (int i = 0; i < validCells.Length; i++)
-            validCells[i] = true;
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int newIndex = y * width + x;
+
+                if (x < oldWidth && y < oldHeight && oldValidCells != null)
+                {
+                    int oldIndex = y * oldWidth + x;
+                    validCells[newIndex] = oldValidCells[oldIndex];
+                }
+                else
+                {
+                    validCells[newIndex] = true;
+                }
+            }
+        }
     }
 }

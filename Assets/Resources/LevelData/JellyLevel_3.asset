@@ -24,7 +24,7 @@ MonoBehaviour:
     - Color: 3
       Slots: 00000000
     - Color: 4
-      Slots: 03000000
+      Slots: 01000000
     - Color: 1
       Slots: 0200000003000000
   - Position: {x: 2, y: 2}

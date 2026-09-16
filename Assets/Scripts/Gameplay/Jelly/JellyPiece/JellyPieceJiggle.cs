@@ -9,16 +9,17 @@ public class JellyPieceJiggle : JellyPieceAbstract
     [SerializeField] private float damping = 0.82f;
     [Header("Jelly Limit")]
     [SerializeField] private float maxStretch = 0.25f;
+    [SerializeField] private float followLag = 0.08f;
     private JellyPieceModel jellyPieceModel;
 
     private MeshFilter meshFilter;
-    private MeshRenderer meshRenderer;
-
     private Mesh originalMesh;
     private Mesh meshClone;
 
     private JellyVertex[] jellyVertices;
     private Vector3[] vertexArray;
+    private Bounds localBounds;
+    private Vector3 previousModelPosition;
 
     protected override void Awake()
     {
@@ -36,9 +37,6 @@ public class JellyPieceJiggle : JellyPieceAbstract
 
         this.meshFilter =
             this.jellyPieceModel.GetComponent<MeshFilter>();
-
-        this.meshRenderer =
-            this.jellyPieceModel.GetComponent<MeshRenderer>();
 
         if (this.meshFilter == null)
             return;
@@ -90,6 +88,12 @@ public class JellyPieceJiggle : JellyPieceAbstract
 
         this.vertexArray =
             new Vector3[this.meshClone.vertexCount];
+
+        this.localBounds =
+            this.originalMesh.bounds;
+
+        this.previousModelPosition =
+            this.jellyPieceModel.transform.position;
     }
 
     private void FixedUpdate()
@@ -101,6 +105,16 @@ public class JellyPieceJiggle : JellyPieceAbstract
 
         Vector3[] originalVertices =
             this.originalMesh.vertices;
+
+        Vector3 currentModelPosition =
+            this.jellyPieceModel.transform.position;
+
+        float movementX =
+            currentModelPosition.x -
+            this.previousModelPosition.x;
+
+        this.previousModelPosition =
+            currentModelPosition;
 
         /*
          * Mỗi frame physics:
@@ -114,13 +128,9 @@ public class JellyPieceJiggle : JellyPieceAbstract
         for (int i = 0; i < this.jellyVertices.Length; i++)
         {
             Vector3 target =
-                this.jellyPieceModel.transform.TransformPoint(
-                    originalVertices[i]
-                );
-
-            float heightWeight =
-                this.GetHeightWeight(
-                    target
+                this.GetDeformedTarget(
+                    originalVertices[i],
+                    movementX
                 );
 
             this.jellyVertices[i].Shake(
@@ -136,19 +146,16 @@ public class JellyPieceJiggle : JellyPieceAbstract
                     this.jellyVertices[i].Position
                 );
 
-            /*
-             * Intensity quyết định mức độ vertex
-             * được phép giữ lại quán tính.
-             *
-             * heightWeight:
-             * đáy thấp
-             * đầu cao
-             */
+            float deformationWeight =
+                this.GetDeformationWeight(
+                    originalVertices[i]
+                );
+
             this.vertexArray[i] =
                 Vector3.Lerp(
                     originalVertices[i],
                     localPosition,
-                    heightWeight * this.intensity
+                    deformationWeight
                 );
         }
 
@@ -159,32 +166,92 @@ public class JellyPieceJiggle : JellyPieceAbstract
         this.meshClone.RecalculateNormals();
     }
 
-    private float GetHeightWeight(Vector3 worldPosition)
+    private Vector3 GetDeformedTarget(
+        Vector3 originalVertex,
+        float movementX)
     {
-        if (this.meshRenderer == null)
-            return this.intensity;
+        Vector3 localBottomLeft =
+            new Vector3(
+                this.localBounds.min.x,
+                this.localBounds.center.y,
+                this.localBounds.min.z
+            );
 
-        Bounds bounds =
-            this.meshRenderer.bounds;
+        Vector3 localBottomRight =
+            new Vector3(
+                this.localBounds.max.x,
+                this.localBounds.center.y,
+                this.localBounds.min.z
+            );
 
-        if (bounds.size.y <= 0.0001f)
-            return this.intensity;
+        float distanceToGrip =
+            Mathf.Min(
+                Vector3.Distance(originalVertex, localBottomLeft),
+                Vector3.Distance(originalVertex, localBottomRight)
+            );
+
+        float gripRadius =
+            Mathf.Max(
+                this.localBounds.size.x,
+                this.localBounds.size.z
+            ) * 0.75f;
+
+        float gripInfluence =
+            gripRadius <= 0.0001f
+                ? 1f
+                : 1f - Mathf.Clamp01(distanceToGrip / gripRadius);
 
         float height =
             Mathf.InverseLerp(
-                bounds.min.y,
-                bounds.max.y,
-                worldPosition.y
+                this.localBounds.min.z,
+                this.localBounds.max.z,
+                originalVertex.z
             );
 
-        /*
-         * Bottom ít deform.
-         * Top deform nhiều.
-         */
-        return Mathf.SmoothStep(
-            0f,
+        float upperBodyLag =
+            Mathf.SmoothStep(0f, 1f, height) *
+            (1f - gripInfluence * 0.5f);
+
+        Vector3 target =
+            this.jellyPieceModel.transform.TransformPoint(
+                originalVertex
+            );
+
+        float lagOffsetX =
+            movementX /
+            Mathf.Max(Time.fixedDeltaTime, 0.0001f) *
+            this.followLag *
+            upperBodyLag;
+
+        lagOffsetX =
+            Mathf.Clamp(
+                lagOffsetX,
+                -this.maxStretch,
+                this.maxStretch
+            );
+
+        target.x -=
+            lagOffsetX;
+
+        return target;
+    }
+
+    private float GetDeformationWeight(Vector3 originalVertex)
+    {
+        float height =
+            Mathf.InverseLerp(
+                this.localBounds.min.z,
+                this.localBounds.max.z,
+                originalVertex.z
+            );
+
+        float bottomWeight =
+            1f - Mathf.SmoothStep(0f, 1f, height);
+
+        return Mathf.Lerp(
+            this.intensity,
             1f,
-            height
+            bottomWeight
         );
     }
 
@@ -215,6 +282,9 @@ public class JellyPieceJiggle : JellyPieceAbstract
 
         this.meshClone.vertices =
             this.vertexArray;
+
+        this.previousModelPosition =
+            this.jellyPieceModel.transform.position;
 
         this.meshClone.RecalculateBounds();
         this.meshClone.RecalculateNormals();

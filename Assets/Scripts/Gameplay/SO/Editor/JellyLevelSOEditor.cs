@@ -22,6 +22,8 @@ public class JellyLevelSOEditor : Editor
     {
         JellyLevelSO board = (JellyLevelSO)target;
 
+        serializedObject.Update();
+
         // =====================================================
         // SIZE
         // =====================================================
@@ -46,7 +48,6 @@ public class JellyLevelSOEditor : Editor
             EditorUtility.SetDirty(board);
             AssetDatabase.SaveAssets();
 
-            // Đồng bộ lại giá trị sau khi Apply
             width = board.Width;
             height = board.Height;
         }
@@ -74,13 +75,8 @@ public class JellyLevelSOEditor : Editor
         }
         else
         {
-            // =================================================
-            // X COORDINATES
-            // =================================================
-
             EditorGUILayout.BeginHorizontal();
 
-            // Chừa chỗ cho Y
             GUILayout.Space(LabelWidth);
 
             for (int x = 0; x < board.Width; x++)
@@ -100,15 +96,10 @@ public class JellyLevelSOEditor : Editor
 
             EditorGUILayout.EndHorizontal();
 
-            // =================================================
-            // GRID + Y COORDINATES
-            // =================================================
-
             for (int y = 0; y < board.Height; y++)
             {
                 EditorGUILayout.BeginHorizontal();
 
-                // Y coordinate
                 GUIStyle yLabelStyle = new GUIStyle(EditorStyles.label)
                 {
                     alignment = TextAnchor.MiddleCenter
@@ -121,7 +112,6 @@ public class JellyLevelSOEditor : Editor
                     GUILayout.Height(CellSize)
                 );
 
-                // Grid cells
                 for (int x = 0; x < board.Width; x++)
                 {
                     int index = y * board.Width + x;
@@ -185,8 +175,6 @@ public class JellyLevelSOEditor : Editor
             true
         );
 
-        serializedObject.ApplyModifiedProperties();
-
         // =====================================================
         // GOALS
         // =====================================================
@@ -200,6 +188,7 @@ public class JellyLevelSOEditor : Editor
             goalsProperty,
             true
         );
+
         // =====================================================
         // REWARD
         // =====================================================

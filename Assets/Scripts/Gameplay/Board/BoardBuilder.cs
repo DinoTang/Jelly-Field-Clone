@@ -119,6 +119,7 @@ public class BoardBuilder : BoardManagerAbstract
       // SetData cho jellyCellCtrl
       jellyCellCtrl.JellyCellConfig.SetGridPos(x, y);
       jellyCellCtrl.JellyCellConfig.SetJellyPosition();
+      jellyCellCtrl.JellyCellDragHandler.SetIsClocking(true);
 
       slot.SetJellyCell(jellyCellCtrl);
 
