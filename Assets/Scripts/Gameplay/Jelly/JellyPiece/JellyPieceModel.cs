@@ -5,13 +5,16 @@ public class JellyPieceModel : JellyPieceAbstract
 {
     [Header("JellyPieceModel")]
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private MeshFilter meshFilter;
     [SerializeField] protected JellyColor color;
     public JellyColor Color => color;
     public MeshRenderer MeshRenderer => meshRenderer;
+    public MeshFilter MeshFilter => meshFilter;
     protected override void LoadComponent()
     {
         base.LoadComponent();
         this.LoadMeshRenderer();
+        this.LaodMeshFilter();
     }
 
     private void LoadMeshRenderer()
@@ -19,6 +22,12 @@ public class JellyPieceModel : JellyPieceAbstract
         if (this.meshRenderer != null) return;
         this.meshRenderer = GetComponent<MeshRenderer>();
         Debug.Log(transform.name + ": LoadMeshRenderer");
+    }
+    private void LaodMeshFilter()
+    {
+        if (this.meshFilter != null) return;
+        this.meshFilter = GetComponent<MeshFilter>();
+        Debug.Log(transform.name + ": LaodMeshFilter");
     }
 
     public void SetColor(JellyColor color)

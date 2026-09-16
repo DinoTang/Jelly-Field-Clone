@@ -10,9 +10,7 @@ public class JellyPieceJiggle : JellyPieceAbstract
     [Header("Jelly Limit")]
     [SerializeField] private float maxStretch = 0.25f;
     [SerializeField] private float followLag = 0.08f;
-    private JellyPieceModel jellyPieceModel;
 
-    private MeshFilter meshFilter;
     private Mesh originalMesh;
     private Mesh meshClone;
 
@@ -23,59 +21,35 @@ public class JellyPieceJiggle : JellyPieceAbstract
 
     protected override void Awake()
     {
-        this.jellyPieceCtrl =
-            GetComponentInParent<JellyPieceCtrl>();
-
-        if (this.jellyPieceCtrl == null)
-            return;
-
-        this.jellyPieceModel =
-            this.jellyPieceCtrl.GetComponentInChildren<JellyPieceModel>();
-
-        if (this.jellyPieceModel == null)
-            return;
-
-        this.meshFilter =
-            this.jellyPieceModel.GetComponent<MeshFilter>();
-
-        if (this.meshFilter == null)
-            return;
-
-        if (this.meshFilter.sharedMesh == null)
-            return;
-
         /*
          * Mesh gốc.
          */
-        this.originalMesh =
-            this.meshFilter.sharedMesh;
+        this.originalMesh = this.jellyPieceCtrl.JellyPieceModel.MeshFilter.sharedMesh;
 
         /*
          * Clone mesh để deform runtime.
          *
          * Không deform asset gốc.
          */
-        this.meshClone =
-            Instantiate(this.originalMesh);
+        this.meshClone = Instantiate(this.originalMesh);
 
-        this.meshClone.name =
-            this.originalMesh.name + "_JiggleRuntime";
+        this.meshClone.name = this.originalMesh.name + "_JiggleRuntime";
 
-        this.meshFilter.mesh =
-            this.meshClone;
+        this.jellyPieceCtrl.JellyPieceModel.MeshFilter.mesh = this.meshClone;
 
         /*
          * Tạo một JellyVertex cho mỗi vertex.
          *
          * Position được lưu ở WORLD SPACE.
          */
+
         this.jellyVertices =
             new JellyVertex[this.meshClone.vertexCount];
 
         for (int i = 0; i < this.meshClone.vertexCount; i++)
         {
             Vector3 worldPosition =
-                this.jellyPieceModel.transform.TransformPoint(
+                this.jellyPieceCtrl.JellyPieceModel.transform.TransformPoint(
                     this.meshClone.vertices[i]
                 );
 
@@ -86,14 +60,11 @@ public class JellyPieceJiggle : JellyPieceAbstract
                 );
         }
 
-        this.vertexArray =
-            new Vector3[this.meshClone.vertexCount];
+        this.vertexArray = new Vector3[this.meshClone.vertexCount];
 
-        this.localBounds =
-            this.originalMesh.bounds;
+        this.localBounds = this.originalMesh.bounds;
 
-        this.previousModelPosition =
-            this.jellyPieceModel.transform.position;
+        this.previousModelPosition = this.jellyPieceCtrl.JellyPieceModel.transform.position;
     }
 
     private void FixedUpdate()
@@ -103,18 +74,13 @@ public class JellyPieceJiggle : JellyPieceAbstract
             this.jellyVertices == null)
             return;
 
-        Vector3[] originalVertices =
-            this.originalMesh.vertices;
+        Vector3[] originalVertices = this.originalMesh.vertices;
 
-        Vector3 currentModelPosition =
-            this.jellyPieceModel.transform.position;
+        Vector3 currentModelPosition = this.jellyPieceCtrl.JellyPieceModel.transform.position;
 
-        float movementX =
-            currentModelPosition.x -
-            this.previousModelPosition.x;
+        float movementX = currentModelPosition.x - this.previousModelPosition.x;
 
-        this.previousModelPosition =
-            currentModelPosition;
+        this.previousModelPosition = currentModelPosition;
 
         /*
          * Mỗi frame physics:
@@ -142,7 +108,7 @@ public class JellyPieceJiggle : JellyPieceAbstract
             );
 
             Vector3 localPosition =
-                this.jellyPieceModel.transform.InverseTransformPoint(
+                this.jellyPieceCtrl.JellyPieceModel.transform.InverseTransformPoint(
                     this.jellyVertices[i].Position
                 );
 
@@ -213,7 +179,7 @@ public class JellyPieceJiggle : JellyPieceAbstract
             (1f - gripInfluence * 0.5f);
 
         Vector3 target =
-            this.jellyPieceModel.transform.TransformPoint(
+            this.jellyPieceCtrl.JellyPieceModel.transform.TransformPoint(
                 originalVertex
             );
 
@@ -268,7 +234,7 @@ public class JellyPieceJiggle : JellyPieceAbstract
         for (int i = 0; i < this.jellyVertices.Length; i++)
         {
             Vector3 worldPosition =
-                this.jellyPieceModel.transform.TransformPoint(
+                this.jellyPieceCtrl.JellyPieceModel.transform.TransformPoint(
                     originalVertices[i]
                 );
 
@@ -284,7 +250,7 @@ public class JellyPieceJiggle : JellyPieceAbstract
             this.vertexArray;
 
         this.previousModelPosition =
-            this.jellyPieceModel.transform.position;
+            this.jellyPieceCtrl.JellyPieceModel.transform.position;
 
         this.meshClone.RecalculateBounds();
         this.meshClone.RecalculateNormals();
