@@ -79,6 +79,18 @@ public class JellyCellArrange : JellyCellAbstract
             return;
         }
 
+        if (slots.Count == 3)
+        {
+            Vector3 center = Vector3.zero;
+
+            foreach (JellySlotType slot in slots)
+                center += GetSlotTransform(slot).position;
+
+            jellyPiece.transform.position = center / slots.Count;
+            jellyPiece.JellyPieceModel.SetSizeFull();
+            return;
+        }
+
         if (slots.Count == 4)
         {
             Vector3 center =
@@ -134,17 +146,17 @@ public class JellyCellArrange : JellyCellAbstract
             return;
         }
 
-        // if (slots.Count == 3)
-        // {
-        //     position = (
-        //        this.GetSlotTransform(slots[0]).position +
-        //        this.GetSlotTransform(slots[1]).position +
-        //        this.GetSlotTransform(slots[2]).position
-        //     ) / 3f;
+        if (slots.Count == 3)
+        {
+            position = Vector3.zero;
 
-        //     scale = new Vector3(36f, 36f, 35f);
-        //     return;
-        // }
+            foreach (JellySlotType slot in slots)
+                position += this.GetSlotTransform(slot).position;
+
+            position /= slots.Count;
+            scale = sizeConfig.Full;
+            return;
+        }
 
         if (slots.Count == 4)
         {
