@@ -172,7 +172,6 @@ Transform:
   - {fileID: 1524038642}
   - {fileID: 999751801}
   - {fileID: 2031753785}
-  - {fileID: 1171755599}
   m_Father: {fileID: 2102004233}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &37847185
@@ -18438,37 +18437,6 @@ MonoBehaviour:
   currentTime: 2
   isNeedDespawn: 0
   jellyPieceCtrl: {fileID: 1941508194}
---- !u!1 &1171755598
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1171755599}
-  m_Layer: 0
-  m_Name: JellyCellJiggleController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1171755599
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171755598}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 37847184}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1211197420
 GameObject:
   m_ObjectHideFlags: 0
@@ -19681,6 +19649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JellyPieceModel
   jellyPieceCtrl: {fileID: 1941508194}
   meshRenderer: {fileID: 1629338165}
+  meshFilter: {fileID: 0}
   color: 0
 --- !u!1 &1631698998
 GameObject:
